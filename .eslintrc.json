@@ -2,5 +2,15 @@
   "extends": [
     "next/core-web-vitals", 
     "plugin:prettier/recommended"
-  ]
+  ],
+  "rules": {
+    "import/first": "error",
+    "import/newline-after-import": "error",
+    "import/order": ["error", {
+      "newlines-between": "always",
+      "alphabetize": {
+        "order": "asc"
+      }
+    }]
+  }
 }
