@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const baseURL =
-  process.env.REACT_APP_ORIGIN || 'https://doodaoma-server.up.railway.app/'
+  process.env.REACT_APP_ORIGIN || 'https://doodaoma-web-dev.up.railway.app/'
 
 const axiosAccountAPI = axios.create({
   baseURL: `${baseURL}`,
