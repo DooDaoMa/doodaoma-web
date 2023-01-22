@@ -21,17 +21,18 @@ export type DisplayImage = {
 
 export type BaseUserProps = {
   email: string
-  name: string
-  roleId: string
-  displayImage: DisplayImage | null
-  status?: string
+  username: string
+}
+
+export type SignUpProps = BaseUserProps & {
+  password: string
 }
 
 export type UserProps = BaseUserProps & {
   id: string
-  createdAt: string
-  suspendedAt: string | null
-  updatedAt: string
+  // createdAt: string
+  // suspendedAt: string | null
+  // updatedAt: string
 }
 
 export type AccountProps = BaseUserProps & {

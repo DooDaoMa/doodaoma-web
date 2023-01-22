@@ -1,4 +1,4 @@
-import { BaseUserProps, LoginPayloadProps } from '../types/account'
+import { AccountId, LoginPayloadProps, SignUpProps } from '../types/account'
 
 import { axiosAccountAPI, axiosAuthAPI } from './axios'
 
@@ -6,7 +6,7 @@ export const performLogin = (payload: LoginPayloadProps) =>
   axiosAuthAPI.post('/login', payload)
 export const performLogout = () => axiosAuthAPI.post('/logout')
 
-export const addUser = (newUser: BaseUserProps) =>
+export const addUser = (newUser: SignUpProps) =>
   axiosAccountAPI.post('/signup', newUser)
-// export const loadCurrentUser = (accountId: AccountId) =>
-//   axiosAccountAPI.get(`/account`)
+export const loadCurrentUser = (accountId: AccountId) =>
+  axiosAccountAPI.get(`/accounts/${accountId}`)
