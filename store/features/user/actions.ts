@@ -4,6 +4,7 @@ import {
   loadCurrentUser,
   performLogin,
   performLogout,
+  addUser,
 } from '../../../services/apis'
 import { UserProps } from '../../../types/account'
 import createAsyncThunk from '../../middleware/customCreateThunk'
@@ -25,3 +26,7 @@ export const fetchCurrentUser = createAsyncThunk({
 
 export const setCurrentUser = createAction<UserProps>('user/setCurrentUser')
 export const resetCurrentUser = createAction('user/resetCurrentUser')
+export const createUser = createAsyncThunk({
+  api: addUser,
+  EVENT_NAME: 'user/signup',
+})
