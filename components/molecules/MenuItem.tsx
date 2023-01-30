@@ -14,7 +14,7 @@ export const MenuItem = (props: MenuItemProps) => {
     <Link href={to}>
       <FontAwesomeIcon
         icon={icon}
-        className="cursor-pointer text-blue-600 sm:h-3 sm:h-3 md:h-5 md:w-5"
+        className="h-5 w-5 cursor-pointer text-blue-600"
       />
     </Link>
   )
