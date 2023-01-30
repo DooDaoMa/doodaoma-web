@@ -24,16 +24,14 @@ export default function SignUp() {
   })
 
   const onSignUp: SubmitHandler<ISignUpFormValue> = (data) => {
-    console.log(data)
     if (data.password === data['confirm password']) {
       dispatch(createUser({ username: data.username, password: data.password }))
     }
   }
   const onPerformSignUp = () => {
-    console.log(loginState.status)
     if (loginState.status === 'success') {
       toast.success('Sign Up success')
-      router.push('/')
+      router.push('/signin')
     } else if (loginState.status === 'error') {
       toast.error('Sign up fail')
     }
@@ -41,13 +39,13 @@ export default function SignUp() {
   useEffect(onPerformSignUp, [loginState, router])
 
   return (
-    <Section className="flex gap-x-8">
+    <Section className="flex flex-col gap-y-8 md:flex-row md:gap-x-8">
       <>
-        <div className="">
+        <div className="flex hidden grow-[2] md:block">
           <Image src="/people.svg" height={400} width={600} alt="people" />
         </div>
         <div className="flex grow-[1] flex-col gap-y-8">
-          <h1 className="text-4xl font-bold">SignUp</h1>
+          <h1 className="text-4xl font-bold">Sign Up</h1>
           <form
             onSubmit={handleSubmit(onSignUp)}
             className="flex flex-col gap-y-3">
