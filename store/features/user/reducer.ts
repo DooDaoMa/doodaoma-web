@@ -3,6 +3,7 @@ import { createReducer } from '@reduxjs/toolkit'
 import { ErrorTypes, UserProps } from '../../../types'
 
 import {
+  createUser,
   fetchCurrentUser,
   login,
   logout,
@@ -24,6 +25,10 @@ interface InitialStateProps {
     error: ErrorTypes | null
   }
   loginState: {
+    status: string
+    error: ErrorTypes | null
+  }
+  signUpState: {
     status: string
     error: ErrorTypes | null
   }
@@ -49,6 +54,10 @@ const initialState: InitialStateProps = {
     isLoading: false,
     error: null,
   },
+  signUpState: {
+    status: 'idle',
+    error: null,
+  },
   logoutState: {
     isLoading: false,
     error: null,
@@ -63,7 +72,7 @@ export const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(login.fulfilled, (state, { payload }) => {
       state.loginState.status = 'success'
-      state.currentUser = payload
+      state.currentUser = payload.data
       state.loginState.error = null
     })
     .addCase(login.rejected, (state, { payload }) => {
@@ -78,7 +87,7 @@ export const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(fetchCurrentUser.fulfilled, (state, { payload }) => {
       state.currentUserState.isLoading = false
-      state.currentUser = payload.currentAccount
+      state.currentUser = payload
       state.currentUserState.error = null
     })
     .addCase(fetchCurrentUser.rejected, (state, { payload }) => {
@@ -103,8 +112,20 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.logoutState.isLoading = false
       state.logoutState.error = payload as ErrorTypes
     })
+    .addCase(createUser.pending, (state) => {
+      state.signUpState.status = 'loading'
+      state.signUpState.error = null
+    })
+    .addCase(createUser.fulfilled, (state) => {
+      state.signUpState.status = 'success'
+    })
+    .addCase(createUser.rejected, (state, { payload }) => {
+      state.signUpState.status = 'error'
+      state.signUpState.error = payload as ErrorTypes
+    })
     .addCase(setToken, (state, { payload }) => {
       state.token = payload
+      localStorage.setItem('token', JSON.stringify({ payload }))
     })
     .addCase(resetCurrentUser, (state) => {
       state.currentUser = null
