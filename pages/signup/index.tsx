@@ -1,14 +1,19 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 import { Button, Input, Section } from '../../components'
-import { createUser } from '../../store/features/user'
-import { useAppDispatch } from '../../store/hooks'
+import { createUser, userSelector } from '../../store/features/user'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { ISignUpFormValue } from '../../types'
 
 export default function SignUp() {
   const dispatch = useAppDispatch()
+  const { loginState } = useAppSelector(userSelector)
+  const router = useRouter()
   const { register, handleSubmit } = useForm({
     defaultValues: {
       username: '',
@@ -18,12 +23,23 @@ export default function SignUp() {
     },
   })
 
-  const onSignup: SubmitHandler<ISignUpFormValue> = (data) => {
+  const onSignUp: SubmitHandler<ISignUpFormValue> = (data) => {
     console.log(data)
     if (data.password === data['confirm password']) {
       dispatch(createUser({ username: data.username, password: data.password }))
     }
   }
+  const onPerformSignUp = () => {
+    console.log(loginState.status)
+    if (loginState.status === 'success') {
+      toast.success('Sign Up success')
+      router.push('/')
+    } else if (loginState.status === 'error') {
+      toast.error('Sign up fail')
+    }
+  }
+  useEffect(onPerformSignUp, [loginState, router])
+
   return (
     <Section className="flex gap-x-8">
       <>
@@ -33,7 +49,7 @@ export default function SignUp() {
         <div className="flex grow-[1] flex-col gap-y-8">
           <h1 className="text-4xl font-bold">SignUp</h1>
           <form
-            onSubmit={handleSubmit(onSignup)}
+            onSubmit={handleSubmit(onSignUp)}
             className="flex flex-col gap-y-3">
             <Input label="username" {...register('username')} />
             <Input label="email" type="email" {...register('email')} />
