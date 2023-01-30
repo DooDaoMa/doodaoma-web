@@ -25,7 +25,13 @@ export default function SignUp() {
 
   const onSignUp: SubmitHandler<ISignUpFormValue> = (data) => {
     if (data.password === data['confirm password']) {
-      dispatch(createUser({ username: data.username, password: data.password }))
+      dispatch(
+        createUser({
+          username: data.username,
+          password: data.password,
+          email: data.email,
+        }),
+      )
     }
   }
   const onPerformSignUp = () => {
