@@ -8,11 +8,13 @@ import {
   logout,
   resetCurrentUser,
   setCurrentUser,
+  setToken,
 } from './actions'
 
 interface InitialStateProps {
   currentUser: UserProps | null
   users: Array<UserProps> | null
+  token: string
   currentUserState: {
     isLoading: boolean
     error: ErrorTypes | null
@@ -22,7 +24,7 @@ interface InitialStateProps {
     error: ErrorTypes | null
   }
   loginState: {
-    isLoading: boolean
+    status: string
     error: ErrorTypes | null
   }
   logoutState: {
@@ -34,8 +36,9 @@ interface InitialStateProps {
 const initialState: InitialStateProps = {
   currentUser: null,
   users: [],
+  token: '',
   loginState: {
-    isLoading: false,
+    status: 'idle',
     error: null,
   },
   currentUserState: {
@@ -55,16 +58,16 @@ const initialState: InitialStateProps = {
 export const userReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(login.pending, (state) => {
-      state.loginState.isLoading = true
+      state.loginState.status = 'loading'
       state.loginState.error = null
     })
     .addCase(login.fulfilled, (state, { payload }) => {
-      state.loginState.isLoading = false
+      state.loginState.status = 'success'
       state.currentUser = payload
       state.loginState.error = null
     })
     .addCase(login.rejected, (state, { payload }) => {
-      state.loginState.isLoading = false
+      state.loginState.status = 'error'
       state.currentUser = null
       state.loginState.error = payload as ErrorTypes
     })
@@ -99,6 +102,9 @@ export const userReducer = createReducer(initialState, (builder) => {
     .addCase(logout.rejected, (state, { payload }) => {
       state.logoutState.isLoading = false
       state.logoutState.error = payload as ErrorTypes
+    })
+    .addCase(setToken, (state, { payload }) => {
+      state.token = payload
     })
     .addCase(resetCurrentUser, (state) => {
       state.currentUser = null

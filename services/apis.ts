@@ -8,5 +8,9 @@ export const performLogout = () => axiosAuthAPI.post('/logout')
 
 export const addUser = (newUser: SignUpProps) =>
   axiosAccountAPI.post('/signup', newUser)
-export const loadCurrentUser = (accountId: AccountId) =>
-  axiosAccountAPI.get(`/accounts/${accountId}`)
+export const loadCurrentUser = (token: AccountId) =>
+  axiosAccountAPI.get('api/account', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
