@@ -34,13 +34,13 @@ export default function SignIn() {
   }
   useEffect(onPerformSignIn, [loginState, router])
   return (
-    <Section className="flex gap-x-8">
+    <Section className="flex flex-col gap-y-8 md:flex-row md:gap-x-8">
       <>
-        <div className="">
+        <div className="flex grow-[2] md:block">
           <Image src="/people.svg" height={400} width={600} alt="people" />
         </div>
         <div className="flex grow-[1] flex-col gap-y-8">
-          <h1 className="text-4xl font-bold">SignIn</h1>
+          <h1 className="text-4xl font-bold">Sign In</h1>
           <form
             onSubmit={handleSubmit(onSignIn)}
             className="flex flex-col gap-y-3">
