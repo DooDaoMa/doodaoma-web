@@ -11,7 +11,6 @@ export const useObserveAuthentication = () => {
   const { currentUser } = useAppSelector(userSelector)
 
   useEffect(() => {
-    console.log(currentUser)
     if (PUBLIC_PATHS.includes(router.pathname) && currentUser === null) {
       return
     }
@@ -20,5 +19,5 @@ export const useObserveAuthentication = () => {
     } else {
       router.push('/signin')
     }
-  }, [router, router.pathname, currentUser])
+  }, [router.pathname, currentUser])
 }
