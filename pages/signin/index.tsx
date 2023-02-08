@@ -27,12 +27,13 @@ export default function SignIn() {
   const onPerformSignIn = () => {
     if (loginState.status === 'success') {
       toast.success('Sign In success')
-      router.push('/')
     } else if (loginState.status === 'error') {
       toast.error('Authentication fail')
     }
   }
+
   useEffect(onPerformSignIn, [loginState, router])
+
   return (
     <Section className="flex flex-col gap-y-8 md:flex-row md:gap-x-8">
       <>

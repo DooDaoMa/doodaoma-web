@@ -37,6 +37,10 @@ interface InitialStateProps {
     isLoading: boolean
     error: ErrorTypes | null
   }
+  restoreUserState: {
+    status: string
+    error: ErrorTypes | null
+  }
 }
 
 const initialState: InitialStateProps = {
@@ -61,6 +65,10 @@ const initialState: InitialStateProps = {
   },
   logoutState: {
     isLoading: false,
+    error: null,
+  },
+  restoreUserState: {
+    status: 'idle',
     error: null,
   },
 }
@@ -123,19 +131,19 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.signUpState.error = payload as ErrorTypes
     })
     .addCase(restoreUser.pending, (state) => {
-      state.loginState.status = 'loading'
-      state.loginState.error = null
+      state.restoreUserState.status = 'loading'
+      state.restoreUserState.error = null
     })
     .addCase(restoreUser.fulfilled, (state, { payload }) => {
       if (!payload) return
-      state.loginState.status = 'success'
+      state.restoreUserState.status = 'success'
       state.currentUser = payload.data
-      state.loginState.error = null
+      state.restoreUserState.error = null
     })
     .addCase(restoreUser.rejected, (state, { payload }) => {
-      state.loginState.status = 'error'
+      state.restoreUserState.status = 'error'
       state.currentUser = null
-      state.loginState.error = payload as ErrorTypes
+      state.restoreUserState.error = payload as ErrorTypes
     })
     .addCase(setToken, (state, { payload }) => {
       state.token = payload
