@@ -53,7 +53,7 @@ export const setToken = createAction<string>('user/setToken')
 
 export const restoreUser = nativeCreateAsyncThunk(
   'user/restoreUser',
-  async (payload, { dispatch, rejectWithValue }) => {
+  async (_, { dispatch, rejectWithValue }) => {
     try {
       const tokenJson = localStorage.getItem('token')
       if (!tokenJson) return
