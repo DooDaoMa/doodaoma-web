@@ -19,5 +19,5 @@ export const useFetchCurrentUser = () => {
       toast.error('Restore user failed. Please sign in again')
       router.push('/signin')
     }
-  }, [router, restoreUserState])
+  }, [restoreUserState])
 }

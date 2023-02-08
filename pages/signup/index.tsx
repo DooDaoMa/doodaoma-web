@@ -44,7 +44,7 @@ export default function SignUp() {
     }
   }
 
-  useEffect(onPerformSignUp, [signUpState, router])
+  useEffect(onPerformSignUp, [signUpState])
 
   return (
     <Section className="flex flex-col gap-y-8 md:flex-row md:gap-x-8">

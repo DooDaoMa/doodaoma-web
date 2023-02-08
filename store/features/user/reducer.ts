@@ -144,6 +144,7 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.restoreUserState.status = 'error'
       state.currentUser = null
       state.restoreUserState.error = payload as ErrorTypes
+      localStorage.removeItem('token')
     })
     .addCase(setToken, (state, { payload }) => {
       state.token = payload

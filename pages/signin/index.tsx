@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
@@ -12,7 +11,6 @@ import { ISignInFormValue } from '../../types'
 
 export default function SignIn() {
   const dispatch = useAppDispatch()
-  const router = useRouter()
   const { loginState } = useAppSelector(userSelector)
   const { register, handleSubmit } = useForm({
     defaultValues: {
@@ -32,7 +30,7 @@ export default function SignIn() {
     }
   }
 
-  useEffect(onPerformSignIn, [loginState, router])
+  useEffect(onPerformSignIn, [loginState])
 
   return (
     <Section className="flex flex-col gap-y-8 md:flex-row md:gap-x-8">
