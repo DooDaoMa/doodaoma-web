@@ -25,7 +25,6 @@ export default function SignIn() {
   }
 
   const onPerformSignIn = () => {
-    console.log(loginState)
     if (loginState.status === 'success') {
       toast.success('Sign In success')
       router.push('/')
