@@ -5,6 +5,7 @@ import { ErrorTypes, UserProps } from '../../../types'
 import {
   createUser,
   fetchCurrentUser,
+  restoreUser,
   login,
   logout,
   resetCurrentUser,
@@ -80,7 +81,6 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.currentUser = null
       state.loginState.error = payload as ErrorTypes
     })
-
     .addCase(fetchCurrentUser.pending, (state) => {
       state.currentUserState.isLoading = true
       state.currentUserState.error = null
@@ -98,7 +98,6 @@ export const userReducer = createReducer(initialState, (builder) => {
     .addCase(setCurrentUser, (state, { payload }) => {
       state.currentUser = payload
     })
-
     .addCase(logout.pending, (state) => {
       state.logoutState.isLoading = true
       state.logoutState.error = null
@@ -122,6 +121,21 @@ export const userReducer = createReducer(initialState, (builder) => {
     .addCase(createUser.rejected, (state, { payload }) => {
       state.signUpState.status = 'error'
       state.signUpState.error = payload as ErrorTypes
+    })
+    .addCase(restoreUser.pending, (state) => {
+      state.loginState.status = 'loading'
+      state.loginState.error = null
+    })
+    .addCase(restoreUser.fulfilled, (state, { payload }) => {
+      if (!payload) return
+      state.loginState.status = 'success'
+      state.currentUser = payload.data
+      state.loginState.error = null
+    })
+    .addCase(restoreUser.rejected, (state, { payload }) => {
+      state.loginState.status = 'error'
+      state.currentUser = null
+      state.loginState.error = payload as ErrorTypes
     })
     .addCase(setToken, (state, { payload }) => {
       state.token = payload
