@@ -16,8 +16,8 @@ export const Navigation = () => {
   const currentUser = useSelector(currentUserSelector)
 
   return (
-    <nav className="border-b border-white px-4 py-4 shadow-md sm:px-12">
-      <div className="hidden sm:relative sm:grid sm:grid-cols-3">
+    <nav className="sm: min-h-[73px] border-b border-white px-4 py-4 shadow-md sm:flex sm:items-center sm:px-12">
+      <div className="hidden sm:relative sm:grid sm:w-full sm:grid-cols-3 sm:items-center">
         <div />
         <div className="flex items-center justify-center gap-x-12">
           <Link href="/" className="cursor-pointer text-blue-600">

@@ -12,7 +12,7 @@ import { ISignUpFormValue } from '../../types'
 
 export default function SignUp() {
   const dispatch = useAppDispatch()
-  const { loginState } = useAppSelector(userSelector)
+  const { signUpState } = useAppSelector(userSelector)
   const router = useRouter()
   const { register, handleSubmit } = useForm({
     defaultValues: {
@@ -34,15 +34,17 @@ export default function SignUp() {
       )
     }
   }
+
   const onPerformSignUp = () => {
-    if (loginState.status === 'success') {
+    if (signUpState.status === 'success') {
       toast.success('Sign Up success')
       router.push('/signin')
-    } else if (loginState.status === 'error') {
+    } else if (signUpState.status === 'error') {
       toast.error('Sign up fail')
     }
   }
-  useEffect(onPerformSignUp, [loginState, router])
+
+  useEffect(onPerformSignUp, [signUpState])
 
   return (
     <Section className="flex flex-col gap-y-8 md:flex-row md:gap-x-8">

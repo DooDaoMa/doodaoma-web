@@ -50,3 +50,22 @@ export const createUser = createAsyncThunk({
 })
 
 export const setToken = createAction<string>('user/setToken')
+
+export const restoreUser = nativeCreateAsyncThunk(
+  'user/restoreUser',
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      const tokenJson = localStorage.getItem('token')
+      if (!tokenJson) return
+      const token = JSON.parse(tokenJson).payload
+      if (!token) return
+      dispatch(setToken(token))
+      const currentUserRes = await loadCurrentUser(token)
+      return currentUserRes
+    } catch (error: any) {
+      const status = error?.response?.status || 400
+      const data = error?.response?.data
+      return rejectWithValue({ status, data })
+    }
+  },
+)

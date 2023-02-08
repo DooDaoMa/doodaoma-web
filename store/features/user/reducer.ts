@@ -5,6 +5,7 @@ import { ErrorTypes, UserProps } from '../../../types'
 import {
   createUser,
   fetchCurrentUser,
+  restoreUser,
   login,
   logout,
   resetCurrentUser,
@@ -36,6 +37,10 @@ interface InitialStateProps {
     isLoading: boolean
     error: ErrorTypes | null
   }
+  restoreUserState: {
+    status: string
+    error: ErrorTypes | null
+  }
 }
 
 const initialState: InitialStateProps = {
@@ -62,6 +67,10 @@ const initialState: InitialStateProps = {
     isLoading: false,
     error: null,
   },
+  restoreUserState: {
+    status: 'idle',
+    error: null,
+  },
 }
 
 export const userReducer = createReducer(initialState, (builder) => {
@@ -80,7 +89,6 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.currentUser = null
       state.loginState.error = payload as ErrorTypes
     })
-
     .addCase(fetchCurrentUser.pending, (state) => {
       state.currentUserState.isLoading = true
       state.currentUserState.error = null
@@ -98,7 +106,6 @@ export const userReducer = createReducer(initialState, (builder) => {
     .addCase(setCurrentUser, (state, { payload }) => {
       state.currentUser = payload
     })
-
     .addCase(logout.pending, (state) => {
       state.logoutState.isLoading = true
       state.logoutState.error = null
@@ -122,6 +129,22 @@ export const userReducer = createReducer(initialState, (builder) => {
     .addCase(createUser.rejected, (state, { payload }) => {
       state.signUpState.status = 'error'
       state.signUpState.error = payload as ErrorTypes
+    })
+    .addCase(restoreUser.pending, (state) => {
+      state.restoreUserState.status = 'loading'
+      state.restoreUserState.error = null
+    })
+    .addCase(restoreUser.fulfilled, (state, { payload }) => {
+      if (!payload) return
+      state.restoreUserState.status = 'success'
+      state.currentUser = payload.data
+      state.restoreUserState.error = null
+    })
+    .addCase(restoreUser.rejected, (state, { payload }) => {
+      state.restoreUserState.status = 'error'
+      state.currentUser = null
+      state.restoreUserState.error = payload as ErrorTypes
+      localStorage.removeItem('token')
     })
     .addCase(setToken, (state, { payload }) => {
       state.token = payload
