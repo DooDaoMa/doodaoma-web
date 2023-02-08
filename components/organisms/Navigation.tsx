@@ -31,7 +31,7 @@ export const Navigation = () => {
               />
             </svg>
           </Link>
-          <MenuItem icon={faCalendar} to="/" />
+          <MenuItem icon={faCalendar} to="/reservation" />
           <MenuItem icon={faImage} to="/" />
           <MenuItem icon={faUser} to="/" />
         </div>
