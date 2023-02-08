@@ -10,4 +10,11 @@ export type ISignInFormValue = {
   password: string
 }
 
-export type IFormValue = ISignUpFormValue | ISignInFormValue
+export type IReservationFormValue = {
+  timeSlotList: Date[]
+}
+
+export type IFormValue =
+  | ISignUpFormValue
+  | ISignInFormValue
+  | IReservationFormValue
