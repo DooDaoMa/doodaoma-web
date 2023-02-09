@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
@@ -10,8 +11,9 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { ISignInFormValue } from '../../types'
 
 export default function SignIn() {
+  const router = useRouter()
   const dispatch = useAppDispatch()
-  const { loginState } = useAppSelector(userSelector)
+  const { loginState, currentUser } = useAppSelector(userSelector)
   const { register, handleSubmit } = useForm({
     defaultValues: {
       username: '',
@@ -30,7 +32,18 @@ export default function SignIn() {
     }
   }
 
+  const onSignedIn = () => {
+    if (currentUser !== null) {
+      router.push('/')
+    }
+  }
+
+  if (currentUser !== null) {
+    router.push('/')
+  }
+
   useEffect(onPerformSignIn, [loginState])
+  useEffect(onSignedIn, [currentUser])
 
   return (
     <Section className="flex flex-col gap-y-8 md:flex-row md:gap-x-8">
