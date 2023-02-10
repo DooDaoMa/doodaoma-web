@@ -15,5 +15,5 @@ export const loadCurrentUser = (token: AccountId) =>
     },
   })
 
-export const fetchAcoountImages = (userId: string) =>
+export const fetchAccountImages = (userId: string) =>
   axiosContentAPI.get(`/api/account/${userId}/images`)
