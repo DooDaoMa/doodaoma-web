@@ -2,7 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['doodaoma-images.s3.ap-southeast-1.amazonaws.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'doodaoma-images.s3.ap-southeast-1.amazonaws.com',
+      },
+    ],
   },
 }
 

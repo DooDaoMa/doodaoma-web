@@ -27,16 +27,20 @@ export default function Images() {
 
   return (
     <RouteGuard>
-      <h1 className="text-3xl font-bold">Your Gallery</h1>
-      <div className="flex flex-row">
+      <h1 className="mb-6 text-3xl font-bold">Your Gallery</h1>
+      <div className="grid grid-cols-5 gap-12">
         {images.length > 0 &&
           images.map((image) => (
-            <div key={image.id}>
+            <div className="relative h-48 rounded-md" key={image.id}>
               <Image
+                className="overflow-hidden object-cover"
                 src={image.imageUrl}
-                width={400}
-                height={400}
                 alt={image.name}
+                priority
+                fill
+                sizes="(max-width: 768px) 100vw,
+                (max-width: 1200px) 50vw,
+                33vw"
               />
             </div>
           ))}
