@@ -7,7 +7,7 @@ import { fetchMyImages, gallerySelector } from '../../store/features/gallery'
 import { currentUserSelector } from '../../store/features/user'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 
-export default function Images() {
+export default function Gallery() {
   const dispatch = useAppDispatch()
   const currentUser = useAppSelector(currentUserSelector)
   const { images, fetchMyImagesState } = useAppSelector(gallerySelector)
