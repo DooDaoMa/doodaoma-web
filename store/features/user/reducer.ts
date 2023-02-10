@@ -135,10 +135,10 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.restoreUserState.error = null
     })
     .addCase(restoreUser.fulfilled, (state, { payload }) => {
-      if (!payload) return
       state.restoreUserState.status = 'success'
-      state.currentUser = payload.data
       state.restoreUserState.error = null
+      if (!payload) return
+      state.currentUser = payload.data
     })
     .addCase(restoreUser.rejected, (state, { payload }) => {
       state.restoreUserState.status = 'error'
