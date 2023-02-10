@@ -1,6 +1,6 @@
 import { AccountId, LoginPayloadProps, SignUpProps } from '../types/account'
 
-import { axiosAccountAPI, axiosAuthAPI } from './axios'
+import { axiosAccountAPI, axiosAuthAPI, axiosContentAPI } from './axios'
 
 export const performLogin = (payload: LoginPayloadProps) =>
   axiosAuthAPI.post('/login', payload)
@@ -9,8 +9,11 @@ export const performLogout = () => axiosAuthAPI.post('/logout')
 export const addUser = (newUser: SignUpProps) =>
   axiosAccountAPI.post('/signup', newUser)
 export const loadCurrentUser = (token: AccountId) =>
-  axiosAccountAPI.get('api/account', {
+  axiosAccountAPI.get('/api/account', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   })
+
+export const fetchAcoountImages = (userId: string) =>
+  axiosContentAPI.get(`/api/account/${userId}/images`)

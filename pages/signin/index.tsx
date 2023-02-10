@@ -6,14 +6,19 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 import { Button, Input, Section } from '../../components'
-import { login, userSelector } from '../../store/features/user'
+import {
+  currentUserSelector,
+  login,
+  userSelector,
+} from '../../store/features/user'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { ISignInFormValue } from '../../types'
 
 export default function SignIn() {
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const { loginState, currentUser } = useAppSelector(userSelector)
+  const { loginState } = useAppSelector(userSelector)
+  const currentUser = useAppSelector(currentUserSelector)
   const { register, handleSubmit } = useForm({
     defaultValues: {
       username: '',
@@ -36,10 +41,6 @@ export default function SignIn() {
     if (currentUser !== null) {
       router.push('/')
     }
-  }
-
-  if (currentUser !== null) {
-    router.push('/')
   }
 
   useEffect(onPerformSignIn, [loginState])
