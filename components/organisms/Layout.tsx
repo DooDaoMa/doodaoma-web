@@ -1,19 +1,21 @@
 import { ReactNode } from 'react'
 import { ToastContainer } from 'react-toastify'
 
-import { useFetchCurrentUser } from '../../hooks/useFetchCurentUser'
-import { useObserveAuthentication } from '../../hooks/useObserveAuthentication'
+import { useRestoreUser } from '../../hooks/useRestoreUser'
 
 import { Navigation } from './Navigation'
 
 export const Layout = ({ children }: { children: ReactNode }) => {
-  useFetchCurrentUser()
-  useObserveAuthentication()
+  const isRestoring = useRestoreUser()
 
   return (
     <>
       <Navigation />
-      <main className="min-h-full sm:p-4 md:p-12">{children}</main>
+      {isRestoring ? (
+        <h1>Loading...</h1>
+      ) : (
+        <main className="min-h-full sm:p-4 md:p-12">{children}</main>
+      )}
       <ToastContainer />
     </>
   )

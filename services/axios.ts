@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 const baseURL =
-  process.env.REACT_APP_ORIGIN || 'https://doodaoma-server-dev.up.railway.app/'
+  process.env.NEXT_PUBLIC_BASE_URL ||
+  'https://doodaoma-server-dev.up.railway.app/'
 
 const axiosAccountAPI = axios.create({
   baseURL: `${baseURL}`,
@@ -15,6 +16,7 @@ const axiosAuthAPI = axios.create({
 
 const axiosContentAPI = axios.create({
   baseURL: `${baseURL}`,
+  withCredentials: true,
 })
 
 export { axiosAccountAPI, axiosAuthAPI, axiosContentAPI }

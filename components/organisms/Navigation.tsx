@@ -32,7 +32,7 @@ export const Navigation = () => {
             </svg>
           </Link>
           <MenuItem icon={faCalendar} to="/" />
-          <MenuItem icon={faImage} to="/" />
+          <MenuItem icon={faImage} to="/gallery" />
           <MenuItem icon={faUser} to="/" />
         </div>
         <div className="flex items-center justify-end">

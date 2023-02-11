@@ -6,13 +6,18 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 import { Button, Input, Section } from '../../components'
-import { createUser, userSelector } from '../../store/features/user'
+import {
+  createUser,
+  currentUserSelector,
+  userSelector,
+} from '../../store/features/user'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { ISignUpFormValue } from '../../types'
 
 export default function SignUp() {
   const dispatch = useAppDispatch()
   const { signUpState } = useAppSelector(userSelector)
+  const currentUser = useAppSelector(currentUserSelector)
   const router = useRouter()
   const { register, handleSubmit } = useForm({
     defaultValues: {
@@ -44,7 +49,14 @@ export default function SignUp() {
     }
   }
 
+  const onSignedIn = () => {
+    if (currentUser !== null) {
+      router.push('/')
+    }
+  }
+
   useEffect(onPerformSignUp, [signUpState])
+  useEffect(onSignedIn, [currentUser])
 
   return (
     <Section className="flex flex-col gap-y-8 md:flex-row md:gap-x-8">

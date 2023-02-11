@@ -1,5 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
 
+import { axiosAccountAPI, axiosContentAPI } from '../../../services/axios'
 import { ErrorTypes, UserProps } from '../../../types'
 
 import {
@@ -135,23 +136,27 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.restoreUserState.error = null
     })
     .addCase(restoreUser.fulfilled, (state, { payload }) => {
-      if (!payload) return
       state.restoreUserState.status = 'success'
-      state.currentUser = payload.data
       state.restoreUserState.error = null
+      if (!payload) return
+      state.currentUser = payload.data
     })
     .addCase(restoreUser.rejected, (state, { payload }) => {
       state.restoreUserState.status = 'error'
-      state.currentUser = null
       state.restoreUserState.error = payload as ErrorTypes
-      localStorage.removeItem('token')
     })
     .addCase(setToken, (state, { payload }) => {
       state.token = payload
+      axiosAccountAPI.defaults.headers.common.Authorization = `Bearer ${payload}`
+      axiosContentAPI.defaults.headers.common.Authorization = `Bearer ${payload}`
       localStorage.setItem('token', JSON.stringify({ payload }))
     })
     .addCase(resetCurrentUser, (state) => {
+      state.token = ''
       state.currentUser = null
+      localStorage.removeItem('token')
+      delete axiosAccountAPI.defaults.headers.common.Authorization
+      delete axiosContentAPI.defaults.headers.common.Authorization
     })
 })
 
