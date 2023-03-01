@@ -2,16 +2,35 @@ import { ButtonHTMLAttributes, ReactNode } from 'react'
 
 type ButtonProps = {
   children: ReactNode
+  btnStyle?: 'primary' | 'secondary' | 'danger' | 'warning'
   type?: 'button' | 'submit' | 'reset'
 } & ButtonHTMLAttributes<HTMLButtonElement>
 
 export const Button = (props: ButtonProps) => {
-  const { children, type = 'button', onClick, className } = props
+  const {
+    children,
+    btnStyle = 'primary',
+    type = 'button',
+    onClick,
+    className,
+  } = props
 
+  const getStyle = () => {
+    switch (btnStyle) {
+      case 'primary':
+        return 'primary-btn'
+      case 'secondary':
+        return 'secondary-btn'
+      case 'warning':
+        return 'warning-btn'
+      default:
+        return 'primary-btn'
+    }
+  }
   return (
     <button
       type={type}
-      className={`transition-button block w-fit rounded-md border border-gray-300 bg-blue-500 px-4 py-2 font-bold uppercase text-white transition focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${className}`}
+      className={`transition-button block w-fit rounded-md border px-4 py-2 font-bold uppercase sm:text-sm ${className} ${getStyle()}`}
       onClick={onClick}>
       {children}
     </button>
