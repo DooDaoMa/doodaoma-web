@@ -6,14 +6,15 @@ import ReactModal from 'react-modal'
 import { Button } from './Button'
 
 type ModalProps = {
-  children: ReactNode
+  children: ReactNode | string | number
   isOpen: boolean
   title: string
   handleIsOpen: Dispatch<SetStateAction<boolean>>
+  handleSubmit: () => void
 }
 
 export const Modal = (props: ModalProps) => {
-  const { isOpen, handleIsOpen, children, title, ...rest } = props
+  const { isOpen, handleIsOpen, handleSubmit, children, title, ...rest } = props
   return (
     <ReactModal
       contentLabel={`${title} Modal`}
@@ -50,14 +51,19 @@ export const Modal = (props: ModalProps) => {
         <h2 className="text-3xl font-bold">{title}</h2>
         <div
           onClick={() => handleIsOpen(!isOpen)}
-          className="cursor-pointer rounded-md bg-gray-50 p-1 transition delay-100 ease-in-out hover:bg-gray-100 hover:text-gray-700">
-          <FontAwesomeIcon icon={faTimes} className="h-6 w-6 text-gray-600 " />
+          className="transition-button close-btn flex h-6 w-6 cursor-pointer items-center justify-center rounded-md">
+          <FontAwesomeIcon icon={faTimes} className="" />
         </div>
       </div>
       <div>{children}</div>
       <div className="mt-auto flex border-t border-gray-200 pt-6">
-        <Button className="ml-auto mr-3">cancel</Button>
-        <Button>submit</Button>
+        <Button
+          btnStyle="secondary"
+          className="ml-auto mr-3"
+          onClick={() => handleIsOpen(!isOpen)}>
+          cancel
+        </Button>
+        <Button onClick={() => handleSubmit()}>submit</Button>
       </div>
     </ReactModal>
   )
