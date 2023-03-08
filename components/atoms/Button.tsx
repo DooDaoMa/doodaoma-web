@@ -13,6 +13,7 @@ export const Button = (props: ButtonProps) => {
     type = 'button',
     onClick,
     className,
+    disabled,
   } = props
 
   const getStyle = () => {
@@ -30,8 +31,9 @@ export const Button = (props: ButtonProps) => {
   return (
     <button
       type={type}
-      className={`transition-button block w-fit rounded-md border px-4 py-2 font-bold uppercase sm:text-sm ${className} ${getStyle()}`}
-      onClick={onClick}>
+      className={`transition-button block w-fit rounded-md border px-4 py-2 font-bold uppercase sm:text-sm ${className} ${getStyle()} disabled:cursor-not-allowed disabled:bg-slate-300`}
+      onClick={onClick}
+      disabled={disabled}>
       {children}
     </button>
   )
