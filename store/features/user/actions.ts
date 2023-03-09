@@ -9,7 +9,11 @@ import {
   performLogout,
   addUser,
 } from '../../../services/apis'
-import { LoginPayloadProps, UserProps } from '../../../types/account'
+import {
+  AuthTokenPayloadProps,
+  LoginPayloadProps,
+  UserProps,
+} from '../../../types/account'
 import createAsyncThunk from '../../middleware/customCreateThunk'
 
 export const login = nativeCreateAsyncThunk(
@@ -20,7 +24,7 @@ export const login = nativeCreateAsyncThunk(
       const data = response?.data
       if (data) {
         dispatch(setToken(data))
-        const currentUserRes = await loadCurrentUser(data)
+        const currentUserRes = await loadCurrentUser()
         return currentUserRes
       }
       return response.data
@@ -49,18 +53,16 @@ export const createUser = createAsyncThunk({
   EVENT_NAME: 'user/signup',
 })
 
-export const setToken = createAction<string>('user/setToken')
+export const setToken = createAction<AuthTokenPayloadProps>('user/setToken')
 
 export const restoreUser = nativeCreateAsyncThunk(
   'user/restoreUser',
   async (_, { dispatch, rejectWithValue }) => {
     try {
-      const tokenJson = localStorage.getItem('token')
-      if (!tokenJson) return
-      const token = JSON.parse(tokenJson).payload
+      const token = localStorage.getItem('token')
       if (!token) return
-      dispatch(setToken(token))
-      const currentUserRes = await loadCurrentUser(token)
+      dispatch(setToken({ token }))
+      const currentUserRes = await loadCurrentUser()
       return currentUserRes
     } catch (error: any) {
       const status = error?.response?.status || 400

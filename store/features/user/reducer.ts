@@ -146,10 +146,11 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.restoreUserState.error = payload as ErrorTypes
     })
     .addCase(setToken, (state, { payload }) => {
-      state.token = payload
-      axiosAccountAPI.defaults.headers.common.Authorization = `Bearer ${payload}`
-      axiosContentAPI.defaults.headers.common.Authorization = `Bearer ${payload}`
-      localStorage.setItem('token', JSON.stringify({ payload }))
+      const { token } = payload
+      state.token = token
+      axiosAccountAPI.defaults.headers.common.Authorization = `Bearer ${token}`
+      axiosContentAPI.defaults.headers.common.Authorization = `Bearer ${token}`
+      localStorage.setItem('token', token)
     })
     .addCase(resetCurrentUser, (state) => {
       state.token = ''

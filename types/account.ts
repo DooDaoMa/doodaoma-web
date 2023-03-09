@@ -4,10 +4,9 @@ export type LoginPayloadProps = {
 }
 
 export type AuthTokenPayloadProps = {
-  authToken: string
+  token: string
 }
 
-export type AccountId = string
 export type DisplayImage = {
   imageType: string
   baseUrl: string
