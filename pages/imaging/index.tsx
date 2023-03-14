@@ -62,7 +62,6 @@ function ImagingWebSocket({ userId }: { userId: string }) {
   )
 
   useEffect(() => {
-    console.log(lastJsonMessage)
     if (readyState !== ReadyState.OPEN) {
       return
     }
