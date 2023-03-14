@@ -20,7 +20,7 @@ export const Navigation = () => {
       <div className="hidden sm:relative sm:grid sm:w-full sm:grid-cols-3 sm:items-center">
         <div />
         <div className="flex items-center justify-center gap-x-12">
-          <Link href="/" className="cursor-pointer text-blue-600">
+          <Link href="/imaging" className="cursor-pointer text-blue-600">
             <svg
               className="h-6 w-5 cursor-pointer text-blue-600"
               xmlns="http://www.w3.org/2000/svg"
