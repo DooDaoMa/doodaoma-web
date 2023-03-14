@@ -14,7 +14,7 @@ const axiosAuthAPI = axios.create({
 })
 
 const axiosContentAPI = axios.create({
-  baseURL: `${baseURL}`,
+  baseURL: `${baseURL}api`,
 })
 
 export { axiosAccountAPI, axiosAuthAPI, axiosContentAPI }

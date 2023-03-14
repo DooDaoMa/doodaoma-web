@@ -1,6 +1,13 @@
-import { AccountId, LoginPayloadProps, SignUpProps } from '../types/account'
+import qs from 'qs'
 
-import { axiosAccountAPI, axiosAuthAPI } from './axios'
+import {
+  AccountId,
+  LoginPayloadProps,
+  SignUpProps,
+  AvailableReservationQueryParams,
+} from '../types'
+
+import { axiosAccountAPI, axiosAuthAPI, axiosContentAPI } from './axios'
 
 export const performLogin = (payload: LoginPayloadProps) =>
   axiosAuthAPI.post('/login', payload)
@@ -14,3 +21,27 @@ export const loadCurrentUser = (token: AccountId) =>
       Authorization: `Bearer ${token}`,
     },
   })
+
+export const loadTimeSlot = (filter: AvailableReservationQueryParams) => {
+  const query = qs.stringify(
+    { ...filter },
+    {
+      addQueryPrefix: true,
+      skipNulls: true,
+    },
+  )
+  return axiosContentAPI.get(`/timeslots${query}`)
+}
+
+export const loadAvailableReservation = (
+  filter: AvailableReservationQueryParams,
+) => {
+  const query = qs.stringify(
+    { ...filter },
+    {
+      addQueryPrefix: true,
+      skipNulls: true,
+    },
+  )
+  return axiosContentAPI.get(`/reservations${query}`)
+}
