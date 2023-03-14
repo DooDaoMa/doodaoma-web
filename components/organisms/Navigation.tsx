@@ -4,6 +4,7 @@ import {
   faUser,
   faImage,
   faBars,
+  faRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
@@ -39,8 +40,8 @@ export const Navigation = () => {
         <div className="flex items-center justify-end">
           {currentUser ? (
             <>
-              <div className="flex cursor-pointer items-center gap-x-2 rounded rounded-full bg-blue-200 py-1 pl-1 pr-4">
-                <div className="h-8 w-8 rounded rounded-full bg-white" />
+              <div className="flex cursor-pointer items-center gap-x-2 rounded-full bg-blue-200 py-1 pl-1 pr-4">
+                <div className="h-8 w-8 rounded-full bg-white" />
                 {currentUser.username}
               </div>
               <div className="text-blue-600">
@@ -48,7 +49,12 @@ export const Navigation = () => {
               </div>
             </>
           ) : (
-            <Link href={'/signin'}>login</Link>
+            <Link href={'/signin'}>
+              <div className="flex cursor-pointer items-center gap-x-1 text-slate-800 transition-opacity hover:text-black">
+                <FontAwesomeIcon icon={faRightFromBracket} />
+                login
+              </div>
+            </Link>
           )}
         </div>
       </div>
