@@ -5,6 +5,7 @@ import {
   LoginPayloadProps,
   SignUpProps,
   AvailableReservationQueryParams,
+  UpdateTimeSlotProps,
 } from '../types'
 
 import { axiosAccountAPI, axiosAuthAPI, axiosContentAPI } from './axios'
@@ -34,6 +35,10 @@ export const loadTimeSlot = (filter: AvailableReservationQueryParams) => {
     },
   )
   return axiosContentAPI.get(`/timeslots${query}`)
+}
+
+export const updateTimeSlot = (payload: UpdateTimeSlotProps) => {
+  return axiosContentAPI.put('/timeslot', payload)
 }
 
 export const loadAvailableReservation = (

@@ -15,7 +15,7 @@ const axiosAuthAPI = axios.create({
 })
 
 const axiosContentAPI = axios.create({
-  baseURL: `${baseURL}`,
+  baseURL: `${baseURL}api`,
   withCredentials: true,
 })
 

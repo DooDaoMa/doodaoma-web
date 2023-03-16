@@ -17,3 +17,9 @@ export type ITimeSlot = {
   username: string
   status: string
 }
+
+export type UpdateTimeSlotProps = {
+  updatedList: string[]
+  status: string
+  username: string
+}
