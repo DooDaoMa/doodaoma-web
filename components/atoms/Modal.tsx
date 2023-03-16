@@ -9,12 +9,22 @@ type ModalProps = {
   children: ReactNode | string | number
   isOpen: boolean
   title: string
+  isPrimaryBtnDisabled?: boolean
   handleIsOpen: Dispatch<SetStateAction<boolean>>
   handleSubmit: () => void
 }
 
 export const Modal = (props: ModalProps) => {
-  const { isOpen, handleIsOpen, handleSubmit, children, title, ...rest } = props
+  const {
+    isOpen,
+    handleIsOpen,
+    handleSubmit,
+    children,
+    title,
+    isPrimaryBtnDisabled = false,
+    ...rest
+  } = props
+
   return (
     <ReactModal
       contentLabel={`${title} Modal`}
@@ -63,7 +73,9 @@ export const Modal = (props: ModalProps) => {
           onClick={() => handleIsOpen(!isOpen)}>
           cancel
         </Button>
-        <Button onClick={() => handleSubmit()}>submit</Button>
+        <Button onClick={() => handleSubmit()} disabled={isPrimaryBtnDisabled}>
+          submit
+        </Button>
       </div>
     </ReactModal>
   )
