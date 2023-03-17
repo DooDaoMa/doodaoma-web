@@ -1,5 +1,4 @@
 import {
-  faPlus,
   faCalendar,
   faUser,
   faImage,
@@ -42,9 +41,6 @@ export const Navigation = () => {
               <div className="flex cursor-pointer items-center gap-x-2 rounded-full bg-blue-200 py-1 pl-1 pr-4">
                 <div className="h-8 w-8 rounded-full bg-white" />
                 {currentUser.username}
-              </div>
-              <div className="text-blue-600">
-                <FontAwesomeIcon icon={faPlus} className="nav-icon" />
               </div>
             </>
           ) : (
