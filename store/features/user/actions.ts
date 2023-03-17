@@ -24,7 +24,8 @@ export const login = nativeCreateAsyncThunk(
       const data = response?.data
       if (data) {
         dispatch(setToken(data))
-        const currentUserRes = await loadCurrentUser()
+        const currentUserRes = await loadCurrentUser(data.token)
+        localStorage.setItem('token', data.token)
         return currentUserRes
       }
       return response.data
@@ -62,7 +63,7 @@ export const restoreUser = nativeCreateAsyncThunk(
       const token = localStorage.getItem('token')
       if (!token) return
       dispatch(setToken({ token }))
-      const currentUserRes = await loadCurrentUser()
+      const currentUserRes = await loadCurrentUser({ token })
       return currentUserRes
     } catch (error: any) {
       const status = error?.response?.status || 400
