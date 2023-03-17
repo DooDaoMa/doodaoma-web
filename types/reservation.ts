@@ -12,6 +12,7 @@ export type AvailableReservationQueryParams = {
 }
 
 export type ITimeSlot = {
+  _id: string
   startTime: Date
   endTime: Date
   username: string

@@ -1,7 +1,7 @@
 import qs from 'qs'
 
 import {
-  AccountId,
+  AuthTokenPayloadProps,
   LoginPayloadProps,
   SignUpProps,
   AvailableReservationQueryParams,
@@ -19,7 +19,7 @@ export const addUser = (newUser: SignUpProps) =>
 
 export const fetchAccountImages = () =>
   axiosContentAPI.get(`/api/account/images`)
-export const loadCurrentUser = (token: AccountId) =>
+export const loadCurrentUser = (token: AuthTokenPayloadProps) =>
   axiosAccountAPI.get('api/account', {
     headers: {
       Authorization: `Bearer ${token}`,

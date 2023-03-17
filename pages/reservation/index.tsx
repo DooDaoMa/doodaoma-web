@@ -4,13 +4,13 @@ import {
   startOfToday,
   parseJSON,
   isSameHour,
-  addMinutes,
-  startOfYesterday,
+  isEqual,
 } from 'date-fns'
 import { useEffect, useState } from 'react'
 import ScheduleSelector from 'react-schedule-selector'
 
 import { Button, Modal, Section } from '../../components'
+import { reserveTimeSlot } from '../../store/features/reservation'
 import { fetchTimeSlot, timeSlotSelector } from '../../store/features/timeslot'
 import { userSelector } from '../../store/features/user'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
@@ -25,53 +25,60 @@ export default function ReservationPage() {
   const [reservedList, setReservedList] = useState<Date[]>([])
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const handleChange = (newSchedule: Date[]) => {
-    setSchedule((prev) => {
-      prev = [...newSchedule]
-      return prev
-    })
+    setSchedule(newSchedule)
   }
 
-  const getFormatSelectedTime = () => {
-    const timeFormat = 'dd eee kk:mm'
-    return `${format(schedule.at(0) || new Date(), timeFormat)} - ${format(
-      schedule.at(schedule.length - 1) || new Date(),
-      timeFormat,
-    )}`
-  }
+  // const getFormatSelectedTime = () => {
+  //   const timeFormat = 'dd eee kk:mm'
+  //   return `${format(schedule.at(0) || new Date(), timeFormat)} - ${format(
+  //     schedule.at(schedule.length - 1) || new Date(),
+  //     timeFormat,
+  //   )}`
+  // }
 
   const onConfirm = () => {
-    const reservedTime = schedule.map((time) => ({
-      startTime: time,
-      endTime: addMinutes(time, 59),
-      username: currentUser,
-      status: 'reserved',
-    }))
-    console.log(reservedTime)
+    const timeSlotIdList = schedule?.map((selectedSlot) => {
+      const slot = timeSlotList?.find((timeSlot) => {
+        return isEqual(selectedSlot, parseJSON(timeSlot.startTime))
+      })
+      if (slot) {
+        return slot._id
+      }
+    })
+    dispatch(
+      reserveTimeSlot({
+        updatedList: timeSlotIdList,
+        status: 'reserved',
+        username: currentUser?.username,
+      }),
+    )
+
+    setIsOpenModal(false)
   }
 
-  const fetchReservedList = () => {
+  // fetch time slot list
+  useEffect(() => {
     dispatch(
       fetchTimeSlot({
-        startTime: startOfYesterday(),
+        startTime: startOfToday(),
         endTime: addDays(startOfToday(), 7),
       }),
     )
-  }
-  useEffect(fetchReservedList, [dispatch])
+  }, [])
+
+  // set reserved time slot list
   useEffect(() => {
     if (timeSlotList && timeSlotList?.length > 0) {
-      setReservedList((prev) => {
-        prev = [
-          ...timeSlotList
-            .filter((timeSlot) => timeSlot.status !== 'available')
-            .map((timeSlot) => parseJSON(timeSlot.startTime)),
-        ]
-        return prev
-      })
+      setReservedList([
+        ...timeSlotList
+          .filter((timeSlot) => timeSlot.status !== 'available')
+          .map((timeSlot) => parseJSON(timeSlot.startTime)),
+      ])
     }
+    // timeSlotList?.forEach((ele) => {
+    //   console.log(format(parseJSON(ele.startTime), 'dd eee kk:mm'), ele.startTime)
+    // })
   }, [timeSlotList])
-
-  console.log(schedule)
 
   return (
     <>
@@ -79,9 +86,13 @@ export default function ReservationPage() {
         isOpen={isOpenModal}
         handleIsOpen={setIsOpenModal}
         title="Confirm your reservation"
+        isPrimaryBtnDisabled={schedule.length < 1}
         handleSubmit={() => onConfirm()}>
-        <h3 className="mb-2 text-xl font-semibold">Reserve time:</h3>
-        <p>{getFormatSelectedTime()}</p>
+        <h3 className="mb-2 text-xl font-semibold">Selected Time Slots:</h3>
+        {schedule.map((timeSlot, i) => (
+          <div key={i}>{format(timeSlot, 'dd eee h aaaa')}</div>
+        ))}
+        <p>total: {schedule.length} hour(s)</p>
       </Modal>
       <Section>
         <>
@@ -93,19 +104,16 @@ export default function ReservationPage() {
             <>
               <ScheduleSelector
                 selection={schedule}
-                minTime={16}
+                minTime={18}
                 maxTime={31}
                 selectionScheme="linear"
                 onChange={handleChange}
-                columnGap="12 rem"
-                rowGap="12 rem"
+                columnGap="1.25rem"
+                rowGap="1.25rem"
                 dateFormat="D ddd"
                 timeFormat="h aa"
-                startDate={new Date('2023-03-13T09:00:00.000Z')}
-                renderDateCell={(dateTime: Date, selected: boolean) => {
-                  // const isAvailable = schedule.find((timeSlot) =>
-                  //   isSameHour(timeSlot, dateTime),
-                  // )
+                startDate={startOfToday()}
+                renderDateCell={(dateTime, selected) => {
                   const reserved = reservedList?.find((timeSlot) =>
                     isSameHour(timeSlot, dateTime),
                   )
@@ -114,21 +122,24 @@ export default function ReservationPage() {
                       <button
                         className={`border-grey-400 curser-pointer w-full rounded-sm border px-2 py-3 delay-100 duration-150 ease-in-out disabled:bg-slate-200 ${
                           selected ? 'border-transparent bg-blue-300' : ''
-                        } ${
-                          reserved ? 'border-transparent bg-red-300' : ''
-                        }`}></button>
+                        }`}
+                        disabled={!!reserved}></button>
                     </>
                   )
                 }}
+                renderTimeLabel={(dateTime) => (
+                  <div className="my-auto">{format(dateTime, 'h aaaa')}</div>
+                )}
               />
               <Button
                 className="ml-auto mt-6"
+                disabled={schedule.length < 1}
                 onClick={() => setIsOpenModal(true)}>
                 next
               </Button>
             </>
           ) : (
-            <div>loading</div>
+            <div>loading...</div>
           )}
         </>
       </Section>
