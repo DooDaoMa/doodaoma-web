@@ -26,7 +26,7 @@ export default function Imaging() {
       {currentUser !== null ? (
         <ImagingWebSocket userId={currentUser.id} />
       ) : (
-        <p>Connecting</p>
+        'Connecting'
       )}
     </>
   )
@@ -62,7 +62,6 @@ function ImagingWebSocket({ userId }: { userId: string }) {
   )
 
   useEffect(() => {
-    console.log(lastJsonMessage)
     if (readyState !== ReadyState.OPEN) {
       return
     }
@@ -70,7 +69,6 @@ function ImagingWebSocket({ userId }: { userId: string }) {
       return
     }
     const message = lastJsonMessage as unknown as Message
-    console.log(message)
 
     switch (message.type) {
       case 'sendMessage': {
