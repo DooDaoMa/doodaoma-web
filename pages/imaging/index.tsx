@@ -1,12 +1,23 @@
 import { useEffect } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { ReadyState } from 'react-use-websocket'
 import { useWebSocket } from 'react-use-websocket/dist/lib/use-websocket'
 
+import { Button, Input, Section } from '../../components'
 import { RouteGuard } from '../../components/organisms/RouteGuard'
 import { userSelector } from '../../store/features/user'
 import { useAppSelector } from '../../store/hooks'
 import { Message } from '../../types/message'
+
+type IImagingFormValue = {
+  targetName: string
+  ra: string
+  dec: string
+  filter: string
+  quantity: string
+  duration: string
+}
 
 export default function Imaging() {
   const { currentUser } = useAppSelector(userSelector)
@@ -23,8 +34,18 @@ export default function Imaging() {
 }
 
 function ImagingWebSocket({ userId }: { userId: string }) {
-  const { lastJsonMessage, readyState } = useWebSocket(
-    `${process.env.NEXT_PUBLIC_WEB_SOCKET_URL || 'ws://localhost:8000'}/web`,
+  const { register, handleSubmit } = useForm<IImagingFormValue>({
+    defaultValues: {
+      targetName: '',
+      ra: '',
+      dec: '',
+      filter: '',
+      quantity: '',
+      duration: '',
+    },
+  })
+  const { lastJsonMessage, readyState, sendJsonMessage } = useWebSocket(
+    `${process.env.NEXT_PUBLIC_WEB_SOCKET_URL || 'ws://localhost:8080'}/web`,
     {
       queryParams: {
         userId: userId,
@@ -36,11 +57,13 @@ function ImagingWebSocket({ userId }: { userId: string }) {
       },
       onOpen: () => {
         toast.success('Connected successfully')
+        sendJsonMessage({ type: 'getFilterWheelOptions' })
       },
     },
   )
 
   useEffect(() => {
+    console.log(lastJsonMessage)
     if (readyState !== ReadyState.OPEN) {
       return
     }
@@ -48,6 +71,7 @@ function ImagingWebSocket({ userId }: { userId: string }) {
       return
     }
     const message = lastJsonMessage as unknown as Message
+    console.log(message)
 
     switch (message.type) {
       case 'sendMessage': {
@@ -57,5 +81,30 @@ function ImagingWebSocket({ userId }: { userId: string }) {
     }
   }, [lastJsonMessage, readyState])
 
-  return <h1 className="mb-6 text-3xl font-bold">Imaging</h1>
+  const onAcquireImage: SubmitHandler<IImagingFormValue> = (value) => {
+    console.log(value)
+  }
+
+  return (
+    <RouteGuard>
+      <h1 className="mb-6 text-3xl font-bold">Imaging</h1>
+      <Section>
+        <form onSubmit={handleSubmit(onAcquireImage)}>
+          <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+            <Input label="Target Name" {...register('targetName')} />
+            <Input label="RA / Right Asc.(hrs)" {...register('ra')} />
+          </div>
+          <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+            <Input label="DEC / Declination (deg)" {...register('dec')} />
+            <Input label="Filter" {...register('filter')} />
+          </div>
+          <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+            <Input label="Qty" {...register('quantity')} />
+            <Input label="Duration (seconds)" {...register('duration')} />
+          </div>
+          <Button type="submit">Acquire images</Button>
+        </form>
+      </Section>
+    </RouteGuard>
+  )
 }

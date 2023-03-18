@@ -1,7 +1,6 @@
 import qs from 'qs'
 
 import {
-  AuthTokenPayloadProps,
   LoginPayloadProps,
   SignUpProps,
   AvailableReservationQueryParams,
@@ -17,14 +16,8 @@ export const performLogout = () => axiosAuthAPI.post('/logout')
 export const addUser = (newUser: SignUpProps) =>
   axiosAccountAPI.post('/signup', newUser)
 
-export const fetchAccountImages = () =>
-  axiosContentAPI.get(`/api/account/images`)
-export const loadCurrentUser = (token: AuthTokenPayloadProps) =>
-  axiosAccountAPI.get('api/account', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
+export const fetchAccountImages = () => axiosContentAPI.get('/account/images')
+export const loadCurrentUser = () => axiosAccountAPI.get('/api/account')
 
 export const loadTimeSlot = (filter: AvailableReservationQueryParams) => {
   const query = qs.stringify(

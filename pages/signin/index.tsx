@@ -19,7 +19,7 @@ export default function SignIn() {
   const dispatch = useAppDispatch()
   const { loginState } = useAppSelector(userSelector)
   const currentUser = useAppSelector(currentUserSelector)
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit } = useForm<ISignInFormValue>({
     defaultValues: {
       username: '',
       password: '',

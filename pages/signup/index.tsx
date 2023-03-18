@@ -19,7 +19,7 @@ export default function SignUp() {
   const { signUpState } = useAppSelector(userSelector)
   const currentUser = useAppSelector(currentUserSelector)
   const router = useRouter()
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit } = useForm<ISignUpFormValue>({
     defaultValues: {
       username: '',
       email: '',

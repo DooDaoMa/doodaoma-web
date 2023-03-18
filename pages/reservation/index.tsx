@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
 import ScheduleSelector from 'react-schedule-selector'
 
 import { Button, Modal, Section } from '../../components'
+import { RouteGuard } from '../../components/organisms/RouteGuard'
 import { reserveTimeSlot } from '../../store/features/reservation'
 import { fetchTimeSlot, timeSlotSelector } from '../../store/features/timeslot'
 import { userSelector } from '../../store/features/user'
@@ -81,7 +82,7 @@ export default function ReservationPage() {
   }, [timeSlotList])
 
   return (
-    <>
+    <RouteGuard>
       <Modal
         isOpen={isOpenModal}
         handleIsOpen={setIsOpenModal}
@@ -95,54 +96,52 @@ export default function ReservationPage() {
         <p>total: {schedule.length} hour(s)</p>
       </Modal>
       <Section>
-        <>
-          <h1 className="section-title">Book the Telescope</h1>
-          <p className="mb-8 text-lg">
-            Select available date and time for reservation
-          </p>
-          {loadTimeSlotState.status === 'success' ? (
-            <>
-              <ScheduleSelector
-                selection={schedule}
-                minTime={18}
-                maxTime={31}
-                selectionScheme="linear"
-                onChange={handleChange}
-                columnGap="1.25rem"
-                rowGap="1.25rem"
-                dateFormat="D ddd"
-                timeFormat="h aa"
-                startDate={startOfToday()}
-                renderDateCell={(dateTime, selected) => {
-                  const reserved = reservedList?.find((timeSlot) =>
-                    isSameHour(timeSlot, dateTime),
-                  )
-                  return (
-                    <>
-                      <button
-                        className={`border-grey-400 curser-pointer w-full rounded-sm border px-2 py-3 delay-100 duration-150 ease-in-out disabled:bg-slate-200 ${
-                          selected ? 'border-transparent bg-blue-300' : ''
-                        }`}
-                        disabled={!!reserved}></button>
-                    </>
-                  )
-                }}
-                renderTimeLabel={(dateTime) => (
-                  <div className="my-auto">{format(dateTime, 'h aaaa')}</div>
-                )}
-              />
-              <Button
-                className="ml-auto mt-6"
-                disabled={schedule.length < 1}
-                onClick={() => setIsOpenModal(true)}>
-                next
-              </Button>
-            </>
-          ) : (
-            <div>loading...</div>
-          )}
-        </>
+        <h1 className="section-title">Book the Telescope</h1>
+        <p className="mb-8 text-lg">
+          Select available date and time for reservation
+        </p>
+        {loadTimeSlotState.status === 'success' ? (
+          <>
+            <ScheduleSelector
+              selection={schedule}
+              minTime={18}
+              maxTime={31}
+              selectionScheme="linear"
+              onChange={handleChange}
+              columnGap="1.25rem"
+              rowGap="1.25rem"
+              dateFormat="D ddd"
+              timeFormat="h aa"
+              startDate={startOfToday()}
+              renderDateCell={(dateTime, selected) => {
+                const reserved = reservedList?.find((timeSlot) =>
+                  isSameHour(timeSlot, dateTime),
+                )
+                return (
+                  <>
+                    <button
+                      className={`border-grey-400 curser-pointer w-full rounded-sm border px-2 py-3 delay-100 duration-150 ease-in-out disabled:bg-slate-200 ${
+                        selected ? 'border-transparent bg-blue-300' : ''
+                      }`}
+                      disabled={!!reserved}></button>
+                  </>
+                )
+              }}
+              renderTimeLabel={(dateTime) => (
+                <div className="my-auto">{format(dateTime, 'h aaaa')}</div>
+              )}
+            />
+            <Button
+              className="ml-auto mt-6"
+              disabled={schedule.length < 1}
+              onClick={() => setIsOpenModal(true)}>
+              next
+            </Button>
+          </>
+        ) : (
+          <div>loading...</div>
+        )}
       </Section>
-    </>
+    </RouteGuard>
   )
 }
