@@ -3,7 +3,6 @@ import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
 import { Button } from '../../components'
-import { RouteGuard } from '../../components/organisms/RouteGuard'
 import { fetchMyImages, gallerySelector } from '../../store/features/gallery'
 import { currentUserSelector } from '../../store/features/user'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
@@ -30,7 +29,7 @@ export default function Gallery() {
   }, [fetchMyImagesState])
 
   return (
-    <RouteGuard>
+    <>
       <div className="mb-6 flex justify-between">
         <h1 className="text-3xl font-bold">Your Gallery</h1>
         <Button
@@ -55,6 +54,8 @@ export default function Gallery() {
             </div>
           ))}
       </div>
-    </RouteGuard>
+    </>
   )
 }
+
+Gallery.requireAuth = true

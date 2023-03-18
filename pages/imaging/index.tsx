@@ -5,7 +5,6 @@ import { ReadyState } from 'react-use-websocket'
 import { useWebSocket } from 'react-use-websocket/dist/lib/use-websocket'
 
 import { Button, Input, Section } from '../../components'
-import { RouteGuard } from '../../components/organisms/RouteGuard'
 import { userSelector } from '../../store/features/user'
 import { useAppSelector } from '../../store/hooks'
 import { Message } from '../../types/message'
@@ -23,13 +22,13 @@ export default function Imaging() {
   const { currentUser } = useAppSelector(userSelector)
 
   return (
-    <RouteGuard>
+    <>
       {currentUser !== null ? (
         <ImagingWebSocket userId={currentUser.id} />
       ) : (
-        'Connecting'
+        <p>Connecting</p>
       )}
-    </RouteGuard>
+    </>
   )
 }
 
@@ -86,7 +85,7 @@ function ImagingWebSocket({ userId }: { userId: string }) {
   }
 
   return (
-    <RouteGuard>
+    <>
       <h1 className="mb-6 text-3xl font-bold">Imaging</h1>
       <Section>
         <form onSubmit={handleSubmit(onAcquireImage)}>
@@ -105,6 +104,8 @@ function ImagingWebSocket({ userId }: { userId: string }) {
           <Button type="submit">Acquire images</Button>
         </form>
       </Section>
-    </RouteGuard>
+    </>
   )
 }
+
+Imaging.requireAuth = true

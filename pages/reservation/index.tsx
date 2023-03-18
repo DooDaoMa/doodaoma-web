@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react'
 import ScheduleSelector from 'react-schedule-selector'
 
 import { Button, Modal, Section } from '../../components'
-import { RouteGuard } from '../../components/organisms/RouteGuard'
 import { reserveTimeSlot } from '../../store/features/reservation'
 import { fetchTimeSlot, timeSlotSelector } from '../../store/features/timeslot'
 import { userSelector } from '../../store/features/user'
@@ -82,7 +81,7 @@ export default function ReservationPage() {
   }, [timeSlotList])
 
   return (
-    <RouteGuard>
+    <>
       <Modal
         isOpen={isOpenModal}
         handleIsOpen={setIsOpenModal}
@@ -142,6 +141,8 @@ export default function ReservationPage() {
           <div>loading...</div>
         )}
       </Section>
-    </RouteGuard>
+    </>
   )
 }
+
+ReservationPage.requireAuth = true
