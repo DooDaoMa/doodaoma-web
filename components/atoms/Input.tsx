@@ -1,7 +1,7 @@
 import { forwardRef } from 'react'
 
 type InputProps = {
-  label: string
+  label?: string
   type?: string
   placeholder?: string
 }
