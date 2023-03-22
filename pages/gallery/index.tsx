@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
-import { RouteGuard } from '../../components/organisms/RouteGuard'
+import { Button } from '../../components'
 import { fetchMyImages, gallerySelector } from '../../store/features/gallery'
 import { currentUserSelector } from '../../store/features/user'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
@@ -16,8 +16,11 @@ export default function Gallery() {
     if (currentUser === null) {
       return
     }
+    if (images.length > 0) {
+      return
+    }
     dispatch(fetchMyImages(undefined))
-  }, [currentUser])
+  }, [currentUser, images])
 
   useEffect(() => {
     if (fetchMyImagesState.error) {
@@ -26,25 +29,33 @@ export default function Gallery() {
   }, [fetchMyImagesState])
 
   return (
-    <RouteGuard>
-      <h1 className="mb-6 text-3xl font-bold">Your Gallery</h1>
+    <>
+      <div className="mb-6 flex justify-between">
+        <h1 className="text-3xl font-bold">Your Gallery</h1>
+        <Button
+          type="button"
+          onClick={() => dispatch(fetchMyImages(undefined))}>
+          Refresh
+        </Button>
+      </div>
       <div className="grid grid-cols-5 gap-12">
         {images.length > 0 &&
           images.map((image) => (
-            <div className="relative h-48 rounded-md" key={image.id}>
+            <div
+              className="relative h-48 overflow-hidden rounded-md lg:h-[320px]"
+              key={image.id}>
               <Image
-                className="overflow-hidden object-cover"
+                className="object-cover"
                 src={image.imageUrl}
                 alt={image.name}
                 priority
                 fill
-                sizes="(max-width: 768px) 100vw,
-                (max-width: 1200px) 50vw,
-                33vw"
               />
             </div>
           ))}
       </div>
-    </RouteGuard>
+    </>
   )
 }
+
+Gallery.requireAuth = true
