@@ -5,16 +5,21 @@ import React from 'react'
 
 type MenuItemProps = {
   icon: IconProp
+  isSelected: boolean
   to: string
 }
 
 export const MenuItem = (props: MenuItemProps) => {
-  const { icon, to } = props
+  const { icon, isSelected, to } = props
   return (
-    <Link href={to}>
+    <Link
+      href={to}
+      className={`border-b-2 border-transparent pb-2 ${
+        isSelected ? 'rounded-sm  border-b-blue-600' : ''
+      }`}>
       <FontAwesomeIcon
         icon={icon}
-        className="h-5 w-5 cursor-pointer text-blue-600"
+        className={`h-5 w-5 cursor-pointer text-blue-600`}
       />
     </Link>
   )
