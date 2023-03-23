@@ -8,13 +8,9 @@ type CheckboxProps = {
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ({ label, ...rest }, ref) => {
     return (
-      <div>
-        <label
-          htmlFor={label}
-          className="mb-1 block text-sm font-medium text-gray-700">
-          {label}
-        </label>
+      <div className="flex items-baseline gap-x-4">
         <input type="checkbox" id={label} name={label} ref={ref} {...rest} />
+        <label htmlFor={label}>{label}</label>
       </div>
     )
   },

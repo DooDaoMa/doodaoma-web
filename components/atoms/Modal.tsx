@@ -1,6 +1,6 @@
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useTheme } from 'next-themes'
 import { Dispatch, ReactNode, SetStateAction } from 'react'
+import { FaTimes } from 'react-icons/fa'
 import ReactModal from 'react-modal'
 
 import { Button } from './Button'
@@ -15,6 +15,7 @@ type ModalProps = {
 }
 
 export const Modal = (props: ModalProps) => {
+  const { theme } = useTheme()
   const {
     isOpen,
     handleIsOpen,
@@ -35,7 +36,11 @@ export const Modal = (props: ModalProps) => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(255, 255, 255, 0.75)',
+          backgroundColor:
+            theme === 'dark'
+              ? 'rgba(255,255,255,0.1)'
+              : 'rgba(255, 255, 255, 0.75)',
+          zIndex: 999,
         },
         content: {
           position: 'absolute',
@@ -43,7 +48,7 @@ export const Modal = (props: ModalProps) => {
           left: '40px',
           right: '40px',
           bottom: '40px',
-          background: '#fff',
+          backgroundColor: theme === 'dark' ? 'rgb(30 41 59)' : '#fff',
           border: 'none',
           overflow: 'auto',
           WebkitOverflowScrolling: 'touch',
@@ -53,6 +58,7 @@ export const Modal = (props: ModalProps) => {
           boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)',
           display: 'flex',
           flexDirection: 'column',
+          zIndex: 999,
         },
       }}
       isOpen={isOpen}
@@ -62,7 +68,7 @@ export const Modal = (props: ModalProps) => {
         <div
           onClick={() => handleIsOpen(!isOpen)}
           className="transition-button close-btn flex h-6 w-6 cursor-pointer items-center justify-center rounded-md">
-          <FontAwesomeIcon icon={faTimes} className="" />
+          <FaTimes />
         </div>
       </div>
       <div>{children}</div>

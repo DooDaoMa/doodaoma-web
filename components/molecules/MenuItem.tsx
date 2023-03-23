@@ -1,21 +1,21 @@
-import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 type MenuItemProps = {
-  icon: IconProp
+  icon: ReactNode
+  isSelected: boolean
   to: string
 }
 
 export const MenuItem = (props: MenuItemProps) => {
-  const { icon, to } = props
+  const { icon, isSelected, to } = props
   return (
-    <Link href={to}>
-      <FontAwesomeIcon
-        icon={icon}
-        className="h-5 w-5 cursor-pointer text-blue-600"
-      />
+    <Link
+      href={to}
+      className={`box-content flex h-full items-center border-b-2 border-transparent text-blue-600 ${
+        isSelected ? ' border-b-blue-600' : ''
+      } rounded-sm hover:border-b-blue-300 `}>
+      {icon}
     </Link>
   )
 }
