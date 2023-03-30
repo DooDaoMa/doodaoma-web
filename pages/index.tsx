@@ -1,5 +1,7 @@
 import Head from 'next/head'
 
+import { MoonPhaseSection, Section } from '../components'
+
 export default function Home() {
   return (
     <>
@@ -10,7 +12,30 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1 className="text-3xl font-bold underline">Hello world!</h1>
+        <h1 className="mb-4 text-3xl font-bold capitalize">welcome</h1>
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          <Section className="">
+            <>
+              <div>Upcoming</div>
+            </>
+          </Section>
+          <Section className="">
+            <>
+              <div>Weather</div>
+            </>
+          </Section>
+          <Section className="">
+            <>
+              <div>Top DSO</div>
+            </>
+          </Section>
+          <Section className="">
+            <>
+              <div>DSO of the day</div>
+            </>
+          </Section>
+          <MoonPhaseSection />
+        </div>
       </main>
     </>
   )

@@ -1,3 +1,4 @@
+import axios from 'axios'
 import qs from 'qs'
 
 import {
@@ -45,4 +46,37 @@ export const loadAvailableReservation = (
     },
   )
   return axiosContentAPI.get(`/reservations${query}`)
+}
+
+export const loadMoonPhase = () => {
+  const body = {
+    format: 'png',
+    style: {
+      moonStyle: 'default',
+      backgroundStyle: 'solid',
+      backgroundColor: 'transparent',
+      headingColor: 'transparent',
+      textColor: 'black',
+    },
+    observer: {
+      latitude: 6.56774,
+      longitude: 79.88956,
+      date: new Date(),
+    },
+    view: {
+      type: 'portrait-simple',
+      orientation: 'south-up',
+    },
+  }
+  return axios.post(
+    'https://api.astronomyapi.com/api/v2/studio/moon-phase',
+    body,
+    {
+      auth: {
+        username: '0cf6db1e-c2c0-40be-b4b7-8046e0039ead',
+        password:
+          '4f53efbfac92f10569de540bdbcb5773eeb1a041e176aea0573b5b61c64b9614e8fd5c89414496ebb3e81706092f09f7eba389e4dfaab953ffc32593219235cb2ef57ca0d31dca2519094b60f848ec992181b32724ef32410a38067d07681f977d1f0dd296ef81fa5f0a2eb02bca8965',
+      },
+    },
+  )
 }
