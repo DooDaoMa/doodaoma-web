@@ -15,8 +15,8 @@ export const MenuItem = (props: MenuItemProps) => {
     <Link
       href={to}
       className={`border-b-2 border-transparent pb-2 ${
-        isSelected ? 'rounded-sm  border-b-blue-600' : ''
-      }`}>
+        isSelected ? ' border-b-blue-600' : ''
+      } rounded-sm hover:border-b-blue-300 `}>
       <FontAwesomeIcon
         icon={icon}
         className={`h-5 w-5 cursor-pointer text-blue-600`}

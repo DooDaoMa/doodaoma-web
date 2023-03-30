@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { currentUserSelector } from '../../store/features/user'
+import { Button } from '../atoms/Button'
 import { MenuItem } from '../molecules/MenuItem'
 
 export const Navigation = () => {
@@ -29,9 +30,9 @@ export const Navigation = () => {
           <MenuItem icon={faHome} to="/" isSelected={selected === '/'} />
           <Link
             href="/imaging"
-            className={`cursor-pointer border-b-2 border-transparent pb-2 ${
-              selected === '/imaging' ? 'rounded-sm  border-b-blue-600' : ''
-            } text-blue-600`}>
+            className={`cursor-pointer rounded-sm border-b-2 border-transparent pb-2 ${
+              selected === '/imaging' ? ' border-b-blue-600' : ''
+            } text-blue-600 hover:border-b-blue-300`}>
             <svg
               width={20}
               height={20}
@@ -57,7 +58,7 @@ export const Navigation = () => {
             isSelected={selected === '/gallery'}
           />
         </div>
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end gap-x-6">
           {currentUser ? (
             <>
               <div className="flex cursor-pointer items-center gap-x-2 rounded-full bg-blue-200 py-1 pl-1 pr-4">
@@ -66,12 +67,17 @@ export const Navigation = () => {
               </div>
             </>
           ) : (
-            <Link href={'/signin'}>
-              <div className="flex cursor-pointer items-center gap-x-1 text-slate-800 transition-opacity hover:text-black">
-                <FontAwesomeIcon icon={faRightFromBracket} />
-                login
-              </div>
-            </Link>
+            <>
+              <Link href={'/signin'}>
+                <div
+                  className="flex cursor-pointer items-center
+                gap-x-1 text-slate-800 transition-opacity hover:text-black hover:underline">
+                  <FontAwesomeIcon icon={faRightFromBracket} />
+                  login
+                </div>
+              </Link>
+              <Button onClick={() => router.push('/signup')}>sign up</Button>
+            </>
           )}
         </div>
       </div>
