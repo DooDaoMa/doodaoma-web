@@ -1,9 +1,8 @@
 /* eslint-disable react/display-name */
-import { faClock } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { format } from 'date-fns'
 import React, { useState } from 'react'
 import { UseFormRegister } from 'react-hook-form'
+import { FiClock } from 'react-icons/fi'
 
 import { IReservationFormValue } from '../../types'
 
@@ -33,7 +32,7 @@ export const ReservationSlot = React.forwardRef<
         {format(startTime, 'kk:mm')} - {format(endTime, 'kk:mm')}
       </p>
       <p>
-        <FontAwesomeIcon icon={faClock} /> 1 hour
+        <FiClock />1 hour
       </p>
       <input
         type="checkbox"

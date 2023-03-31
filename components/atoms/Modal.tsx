@@ -1,6 +1,5 @@
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Dispatch, ReactNode, SetStateAction } from 'react'
+import { FaTimes } from 'react-icons/fa'
 import ReactModal from 'react-modal'
 
 import { Button } from './Button'
@@ -62,7 +61,7 @@ export const Modal = (props: ModalProps) => {
         <div
           onClick={() => handleIsOpen(!isOpen)}
           className="transition-button close-btn flex h-6 w-6 cursor-pointer items-center justify-center rounded-md">
-          <FontAwesomeIcon icon={faTimes} className="" />
+          <FaTimes />
         </div>
       </div>
       <div>{children}</div>
