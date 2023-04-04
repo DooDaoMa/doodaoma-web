@@ -1,8 +1,23 @@
 import Head from 'next/head'
+import { useEffect } from 'react'
 
-import { MoonPhaseSection, Section } from '../components'
+import {
+  Loading,
+  MoonPhaseSection,
+  Section,
+  WeatherSection,
+} from '../components'
+import { feedSelector, fetchFeedContent } from '../store/features/feed'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
 
 export default function Home() {
+  const dispatch = useAppDispatch()
+  const { weather, moonPhase, loadContentState } = useAppSelector(feedSelector)
+
+  useEffect(() => {
+    dispatch(fetchFeedContent())
+  }, [])
+
   return (
     <>
       <Head>
@@ -14,27 +29,35 @@ export default function Home() {
       <main>
         <h1 className="mb-4 text-3xl font-bold capitalize">welcome</h1>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          <Section className="">
+          {loadContentState.status === 'success' ? (
             <>
-              <div>Upcoming</div>
+              <Section className="">
+                <>
+                  <div>Upcoming</div>
+                </>
+              </Section>
+              {weather ? <WeatherSection content={weather} /> : <Loading />}
+              <Section className="">
+                <>
+                  <div>Top DSO</div>
+                </>
+              </Section>
+              <Section className="">
+                <>
+                  <div>DSO of the day</div>
+                </>
+              </Section>
+              {moonPhase ? (
+                <MoonPhaseSection content={moonPhase} />
+              ) : (
+                <Loading />
+              )}
             </>
-          </Section>
-          <Section className="">
-            <>
-              <div>Weather</div>
-            </>
-          </Section>
-          <Section className="">
-            <>
-              <div>Top DSO</div>
-            </>
-          </Section>
-          <Section className="">
-            <>
-              <div>DSO of the day</div>
-            </>
-          </Section>
-          <MoonPhaseSection />
+          ) : (
+            <div className="grid-span-3">
+              <Loading />
+            </div>
+          )}
         </div>
       </main>
     </>

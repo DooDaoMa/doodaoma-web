@@ -11,6 +11,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'widgets.astronomyapi.com',
       },
+      {
+        protocol: 'http',
+        hostname: 'openweathermap.org',
+      },
     ],
   },
 }

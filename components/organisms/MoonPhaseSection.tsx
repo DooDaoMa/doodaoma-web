@@ -1,35 +1,29 @@
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
 
-import { loadMoonPhase } from '../../services/apis'
+import { MoonPhaseData } from '../../types'
+import { Loading } from '../atoms/Loading'
 
 import { Section } from './Section'
 
-export const MoonPhaseSection = () => {
-  const [imgUrl, setImgUrl] = useState()
+type MoonPhaseSectionProps = {
+  content: MoonPhaseData
+}
 
-  useEffect(() => {
-    const load = async () => {
-      const res = await loadMoonPhase()
-      setImgUrl(res.data.data.imageUrl)
-    }
-    load()
-  }, [])
-
+export const MoonPhaseSection = ({ content }: MoonPhaseSectionProps) => {
   return (
     <Section className="">
       <>
         <div>Moon Phase</div>
-        {imgUrl ? (
+        {content.imageUrl ? (
           <Image
-            src={imgUrl}
+            src={content.imageUrl}
             width={200}
             height={260}
             alt="moon phase today"
             className="mx-auto"
           />
         ) : (
-          <div>loading </div>
+          <Loading />
         )}
       </>
     </Section>
