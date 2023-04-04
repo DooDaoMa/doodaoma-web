@@ -1,6 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
 
+import { feedReducer } from './feed'
 import { galleryReducer } from './gallery'
 import { reservationReducer } from './reservation'
 import { timeSlotReducer } from './timeslot'
@@ -11,6 +12,7 @@ const combinedReducer = combineReducers({
   gallery: galleryReducer,
   reservation: reservationReducer,
   timeSlot: timeSlotReducer,
+  feed: feedReducer,
 })
 
 const rootReducer = createReducer(
