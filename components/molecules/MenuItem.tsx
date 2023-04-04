@@ -12,7 +12,7 @@ export const MenuItem = (props: MenuItemProps) => {
   return (
     <Link
       href={to}
-      className={`border-b-2 border-transparent text-blue-600 ${
+      className={`box-content flex h-full items-center border-b-2 border-transparent text-blue-600 ${
         isSelected ? ' border-b-blue-600' : ''
       } rounded-sm hover:border-b-blue-300 `}>
       {icon}

@@ -24,19 +24,23 @@ export const Navigation = () => {
       <div className="hidden h-full sm:relative sm:grid sm:w-full sm:grid-cols-3 sm:items-center">
         <div />
         <div className="flex h-full items-center justify-center gap-x-12">
-          <MenuItem icon={<FaHome />} to="/" isSelected={selected === '/'} />
           <MenuItem
-            icon={<IoTelescope />}
+            icon={<FaHome className="h-5 w-5" />}
+            to="/"
+            isSelected={selected === '/'}
+          />
+          <MenuItem
+            icon={<IoTelescope className="h-5 w-5" />}
             to="/imaging"
             isSelected={selected === 'imaging'}
           />
           <MenuItem
-            icon={<BsCalendarEvent />}
+            icon={<BsCalendarEvent className="h-5 w-5" />}
             to="/reservation"
             isSelected={selected === '/reservation'}
           />
           <MenuItem
-            icon={<IoMdImages />}
+            icon={<IoMdImages className="h-5 w-5" />}
             to="/gallery"
             isSelected={selected === '/gallery'}
           />
