@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from 'react'
 import ScheduleSelector from 'react-schedule-selector'
 
-import { Button, Modal, Section } from '../../components'
+import { Button, Loading, Modal, Section } from '../../components'
 import { reserveTimeSlot } from '../../store/features/reservation'
 import { fetchTimeSlot, timeSlotSelector } from '../../store/features/timeslot'
 import { userSelector } from '../../store/features/user'
@@ -138,7 +138,7 @@ export default function ReservationPage() {
             </Button>
           </>
         ) : (
-          <div>loading...</div>
+          <Loading />
         )}
       </Section>
     </>
