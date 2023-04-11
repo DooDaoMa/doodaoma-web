@@ -1,43 +1,23 @@
-import { addDays, format, parseJSON, startOfToday } from 'date-fns'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import {
   APODSection,
   Loading,
   MoonPhaseSection,
-  Section,
   WeatherSection,
+  UpcomingSection,
 } from '../components'
-import { loadTimeSlot } from '../services/apis'
 import { feedSelector, fetchFeedContent } from '../store/features/feed'
-import { userSelector } from '../store/features/user'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { ITimeSlot } from '../types'
 
 export default function Home() {
   const dispatch = useAppDispatch()
   const { weather, moonPhase, apod, loadContentState } =
     useAppSelector(feedSelector)
-  const { currentUser } = useAppSelector(userSelector)
-
-  const [upcoming, setUpcoming] = useState<ITimeSlot[]>([])
 
   useEffect(() => {
     dispatch(fetchFeedContent())
-
-    if (currentUser?.username) {
-      const loadUpcoming = async () => {
-        const res = await loadTimeSlot({
-          startTime: startOfToday(),
-          endTime: addDays(startOfToday(), 7),
-          username: currentUser?.username,
-          status: 'reserved',
-        })
-        setUpcoming(res.data.data)
-      }
-      loadUpcoming()
-    }
   }, [])
 
   return (
@@ -53,24 +33,7 @@ export default function Home() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {loadContentState.status === 'success' ? (
             <>
-              {upcoming.length > 0 ? (
-                <Section>
-                  <>
-                    <div>Upcoming</div>
-                    <p>
-                      Start:{' '}
-                      {format(parseJSON(upcoming[0].startTime), 'HH:mm aa')}
-                    </p>
-                    <p>
-                      End:{' '}
-                      {format(
-                        parseJSON(upcoming[upcoming.length - 1].endTime),
-                        'HH:mm aa',
-                      )}
-                    </p>
-                  </>
-                </Section>
-              ) : null}
+              <UpcomingSection />
               {weather ? <WeatherSection content={weather} /> : <Loading />}
               {moonPhase ? (
                 <MoonPhaseSection content={moonPhase} />

@@ -11,11 +11,11 @@ export const ReadMore = ({ children }: ReadMoreProps) => {
     setIsReadMore(!isReadMore)
   }
   return (
-    <p>
+    <article>
       {isReadMore ? text.slice(0, 150) : text}
       <span onClick={toggleReadMore} className="cursor-pointer text-blue-500">
         {isReadMore ? '...read more' : ' show less'}
       </span>
-    </p>
+    </article>
   )
 }

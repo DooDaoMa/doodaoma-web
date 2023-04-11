@@ -1,5 +1,6 @@
 export { APODSection } from './organisms/APODSection'
 export { Button } from './atoms/Button'
+export { ChangeThemeButton } from './molecules/ChangeThemeButton'
 export { Input } from './atoms/Input'
 export { Layout } from './organisms/Layout'
 export { Loading } from './atoms/Loading'

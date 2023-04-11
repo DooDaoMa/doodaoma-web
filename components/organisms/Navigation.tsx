@@ -10,17 +10,19 @@ import { useSelector } from 'react-redux'
 
 import { currentUserSelector } from '../../store/features/user'
 import { Button } from '../atoms/Button'
+import { ChangeThemeButton } from '../molecules/ChangeThemeButton'
 import { MenuItem } from '../molecules/MenuItem'
 
 export const Navigation = () => {
   const router = useRouter()
   const currentUser = useSelector(currentUserSelector)
   const [selected, setSelected] = useState<string>(router.pathname || '')
+
   useEffect(() => {
     setSelected(router.pathname)
   }, [router.pathname])
   return (
-    <nav className="sm: min-h-[73px] border-b border-white px-4 py-4 shadow-md sm:flex sm:items-center sm:px-12">
+    <nav>
       <div className="hidden h-full sm:relative sm:grid sm:w-full sm:grid-cols-3 sm:items-center">
         <div />
         <div className="flex h-full items-center justify-center gap-x-12">
@@ -46,6 +48,7 @@ export const Navigation = () => {
           />
         </div>
         <div className="flex items-center justify-end gap-x-6">
+          <ChangeThemeButton />
           {currentUser ? (
             <>
               <div className="flex cursor-pointer items-center gap-x-2 rounded-full bg-blue-200 py-1 pl-1 pr-4">
@@ -58,9 +61,9 @@ export const Navigation = () => {
               <Link href={'/signin'}>
                 <div
                   className="flex cursor-pointer items-center
-                gap-x-1 text-slate-800 transition-opacity hover:text-black hover:underline">
+                gap-x-1 text-slate-900 transition-opacity hover:underline dark:text-white">
                   <FiLogIn />
-                  login
+                  <p>login</p>
                 </div>
               </Link>
               <Button onClick={() => router.push('/signup')}>sign up</Button>

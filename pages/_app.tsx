@@ -1,5 +1,6 @@
 import '../styles/globals.css'
 import type { NextComponentType } from 'next'
+import { ThemeProvider } from 'next-themes'
 import type { AppProps } from 'next/app'
 import ReactModal from 'react-modal'
 import { Provider } from 'react-redux'
@@ -16,16 +17,18 @@ type CustomAppProps = AppProps & {
 export default function App({ Component, pageProps }: CustomAppProps) {
   ReactModal.setAppElement('#__next')
   return (
-    <Provider store={store}>
-      <Layout>
-        {Component.requireAuth ? (
-          <RouteGuard>
+    <ThemeProvider attribute="class">
+      <Provider store={store}>
+        <Layout>
+          {Component.requireAuth ? (
+            <RouteGuard>
+              <Component {...pageProps} />
+            </RouteGuard>
+          ) : (
             <Component {...pageProps} />
-          </RouteGuard>
-        ) : (
-          <Component {...pageProps} />
-        )}
-      </Layout>
-    </Provider>
+          )}
+        </Layout>
+      </Provider>
+    </ThemeProvider>
   )
 }

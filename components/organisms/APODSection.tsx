@@ -15,14 +15,14 @@ export const APODSection = ({ content }: APODSectionProps) => {
       <>
         <div className="feed-card-header">{content.title}</div>
         <Link href={content.hdurl} target="_blank">
-          <div className="relative mb-4 w-full">
-            <img src={content.url} alt="" />
+          <div className="relative mb-2 w-full">
+            <img src={content.url} alt="astronomy picture of the day" />
           </div>
         </Link>
-        <ReadMore>{content.explanation}</ReadMore>
         <p className="text-center text-sm italic text-gray-600">
           &#169; {content.copyright}
         </p>
+        <ReadMore>{content.explanation}</ReadMore>
       </>
     </Section>
   )

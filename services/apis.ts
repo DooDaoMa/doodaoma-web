@@ -49,6 +49,11 @@ export const loadAvailableReservation = (
 }
 
 export const loadMoonPhase = () => {
+  if (
+    !process.env.NEXT_PUBLIC_MOON_PHASE_API_USERNAME &&
+    !process.env.NEXT_PUBLIC_MOON_PHASE_API_PASSWORD
+  )
+    return
   const body = {
     format: 'png',
     style: {
@@ -73,23 +78,20 @@ export const loadMoonPhase = () => {
     body,
     {
       auth: {
-        username:
-          process.env.MOON_PHASE_API_USERNAME ||
-          '0cf6db1e-c2c0-40be-b4b7-8046e0039ead',
-        password:
-          process.env.MOON_PHASE_API_PASSWORD ||
-          '4f53efbfac92f10569de540bdbcb5773eeb1a041e176aea0573b5b61c64b9614e8fd5c89414496ebb3e81706092f09f7eba389e4dfaab953ffc32593219235cb2ef57ca0d31dca2519094b60f848ec992181b32724ef32410a38067d07681f977d1f0dd296ef81fa5f0a2eb02bca8965',
+        username: process.env.NEXT_PUBLIC_MOON_PHASE_API_USERNAME ?? '',
+        password: process.env.NEXT_PUBLIC_MOON_PHASE_API_PASSWORD ?? '',
       },
     },
   )
 }
 
 export const loadWeather = () => {
+  if (!process.env.NEXT_PUBLIC_OPEN_WEATHER_KEY) return
   const query = qs.stringify(
     {
       lat: 13.44,
       lon: 100.31,
-      appid: '21ce03715d96d6330b1d0e3269e6478a',
+      appid: process.env.NEXT_PUBLIC_OPEN_WEATHER_KEY,
     },
     {
       addQueryPrefix: true,
@@ -100,9 +102,10 @@ export const loadWeather = () => {
 }
 
 export const loadAPOD = () => {
+  if (!process.env.NEXT_PUBLIC_NASA_API) return
   const query = qs.stringify(
     {
-      api_key: 'lKm3M2eiPgSNSzoaqheUCFo2PLnwlpxvxCPW1lt3',
+      api_key: process.env.NEXT_PUBLIC_NASA_API,
     },
     {
       addQueryPrefix: true,
