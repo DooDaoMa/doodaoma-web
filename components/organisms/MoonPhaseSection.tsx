@@ -11,9 +11,9 @@ type MoonPhaseSectionProps = {
 
 export const MoonPhaseSection = ({ content }: MoonPhaseSectionProps) => {
   return (
-    <Section className="">
+    <Section className="col-start-3 row-span-2">
       <>
-        <div>Moon Phase</div>
+        <div className="feed-card-header">Moon Phase</div>
         {content.imageUrl ? (
           <Image
             src={content.imageUrl}

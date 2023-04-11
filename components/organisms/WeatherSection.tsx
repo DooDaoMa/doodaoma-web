@@ -14,7 +14,7 @@ export const WeatherSection = ({ content }: WeatherSectionProps) => {
   return (
     <Section>
       <>
-        <div>Weather Today</div>
+        <div className="feed-card-header">Weather Today</div>
         <div className="flex items-center">
           <p>{content?.main}</p>
           <Image
