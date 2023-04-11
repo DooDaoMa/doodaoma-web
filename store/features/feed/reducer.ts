@@ -1,13 +1,19 @@
 import { createReducer } from '@reduxjs/toolkit'
 import { fromUnixTime } from 'date-fns'
 
-import { ErrorTypes, MoonPhaseData, WeatherData } from '../../../types'
+import {
+  ErrorTypes,
+  MoonPhaseData,
+  WeatherData,
+  APODData,
+} from '../../../types'
 
 import { fetchFeedContent, resetFeedContent } from './actions'
 
 interface InitialStateProps {
   moonPhase: MoonPhaseData | null
   weather: WeatherData | null
+  apod: APODData | null
   loadContentState: {
     status: string
     error: ErrorTypes | null
@@ -17,6 +23,7 @@ interface InitialStateProps {
 const initialState: InitialStateProps = {
   moonPhase: null,
   weather: null,
+  apod: null,
   loadContentState: {
     status: 'idle',
     error: null,
@@ -40,6 +47,7 @@ export const feedReducer = createReducer(initialState, (builder) => {
         icon: payload.weather.weather[0].icon,
         id: payload.weather.weather[0].id,
       }
+      state.apod = payload.apod
     })
     .addCase(fetchFeedContent.rejected, (state, { payload }) => {
       state.loadContentState.status = 'error'

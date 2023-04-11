@@ -98,3 +98,16 @@ export const loadWeather = () => {
   )
   return axios.get(`https://api.openweathermap.org/data/2.5/weather${query}`)
 }
+
+export const loadAPOD = () => {
+  const query = qs.stringify(
+    {
+      api_key: 'lKm3M2eiPgSNSzoaqheUCFo2PLnwlpxvxCPW1lt3',
+    },
+    {
+      addQueryPrefix: true,
+      skipNulls: true,
+    },
+  )
+  return axios.get(`https://api.nasa.gov/planetary/apod${query}`)
+}
