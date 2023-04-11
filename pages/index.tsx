@@ -1,21 +1,43 @@
+import { addDays, format, parseJSON, startOfToday } from 'date-fns'
 import Head from 'next/head'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
+  APODSection,
   Loading,
   MoonPhaseSection,
   Section,
   WeatherSection,
 } from '../components'
+import { loadTimeSlot } from '../services/apis'
 import { feedSelector, fetchFeedContent } from '../store/features/feed'
+import { userSelector } from '../store/features/user'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { ITimeSlot } from '../types'
 
 export default function Home() {
   const dispatch = useAppDispatch()
-  const { weather, moonPhase, loadContentState } = useAppSelector(feedSelector)
+  const { weather, moonPhase, apod, loadContentState } =
+    useAppSelector(feedSelector)
+  const { currentUser } = useAppSelector(userSelector)
+
+  const [upcoming, setUpcoming] = useState<ITimeSlot[]>([])
 
   useEffect(() => {
     dispatch(fetchFeedContent())
+
+    if (currentUser?.username) {
+      const loadUpcoming = async () => {
+        const res = await loadTimeSlot({
+          startTime: startOfToday(),
+          endTime: addDays(startOfToday(), 7),
+          username: currentUser?.username,
+          status: 'reserved',
+        })
+        setUpcoming(res.data.data)
+      }
+      loadUpcoming()
+    }
   }, [])
 
   return (
@@ -28,30 +50,34 @@ export default function Home() {
       </Head>
       <main>
         <h1 className="mb-4 text-3xl font-bold capitalize">welcome</h1>
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {loadContentState.status === 'success' ? (
             <>
-              <Section className="">
-                <>
-                  <div>Upcoming</div>
-                </>
-              </Section>
+              {upcoming.length > 0 ? (
+                <Section>
+                  <>
+                    <div>Upcoming</div>
+                    <p>
+                      Start:{' '}
+                      {format(parseJSON(upcoming[0].startTime), 'HH:mm aa')}
+                    </p>
+                    <p>
+                      End:{' '}
+                      {format(
+                        parseJSON(upcoming[upcoming.length - 1].endTime),
+                        'HH:mm aa',
+                      )}
+                    </p>
+                  </>
+                </Section>
+              ) : null}
               {weather ? <WeatherSection content={weather} /> : <Loading />}
-              <Section className="">
-                <>
-                  <div>Top DSO</div>
-                </>
-              </Section>
-              <Section className="">
-                <>
-                  <div>DSO of the day</div>
-                </>
-              </Section>
               {moonPhase ? (
                 <MoonPhaseSection content={moonPhase} />
               ) : (
                 <Loading />
               )}
+              {apod ? <APODSection content={apod} /> : <Loading />}
             </>
           ) : (
             <div className="grid-span-3">
