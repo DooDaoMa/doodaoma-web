@@ -11,7 +11,7 @@ type APODSectionProps = {
 
 export const APODSection = ({ content }: APODSectionProps) => {
   return (
-    <Section className="col-span-2 row-span-2">
+    <Section className="md:col-span-2 md:row-span-2">
       <>
         <div className="feed-card-header">{content.title}</div>
         <Link href={content.hdurl} target="_blank">
