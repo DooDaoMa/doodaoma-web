@@ -7,8 +7,10 @@ export type IReservation = {
 }
 
 export type AvailableReservationQueryParams = {
-  startDate: string
-  endDate: string
+  startTime: Date
+  endTime: Date
+  username?: string
+  status?: string
 }
 
 export type ITimeSlot = {
