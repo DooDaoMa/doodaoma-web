@@ -15,6 +15,10 @@ const nextConfig = {
         protocol: 'http',
         hostname: 'openweathermap.org',
       },
+      {
+        protocol: 'https',
+        hostname: 'apod.nasa.gov',
+      },
     ],
   },
 }
