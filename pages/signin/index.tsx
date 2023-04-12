@@ -47,7 +47,7 @@ export default function SignIn() {
   useEffect(onSignedIn, [currentUser])
 
   return (
-    <Section className="flex flex-col gap-y-8 md:flex-row md:gap-x-8">
+    <Section className="mx-auto flex max-w-4xl flex-col gap-y-8 md:flex-row md:gap-x-8">
       <>
         <div className="flex grow-[2] md:block">
           <Image src="/people.svg" height={400} width={600} alt="people" />
@@ -61,7 +61,7 @@ export default function SignIn() {
             <Input label="password" type="password" {...register('password')} />
             <Button type="submit">submit</Button>
           </form>
-          <p className="text-gray-500">
+          <p className="text-sm text-gray-500">
             Don&rsquo;t have an account?&nbsp;
             <Link href={'/signup'} className="font-bold text-black underline">
               Sign-up
