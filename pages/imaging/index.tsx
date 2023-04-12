@@ -1,8 +1,9 @@
 import Head from 'next/head'
 import { useEffect } from 'react'
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { ReadyState } from 'react-use-websocket'
+import { JsonValue } from 'react-use-websocket/dist/lib/types'
 import { useWebSocket } from 'react-use-websocket/dist/lib/use-websocket'
 
 import { Button, Input, Section } from '../../components'
@@ -10,51 +11,8 @@ import { Checkbox } from '../../components/atoms/Checkbox'
 import { Select } from '../../components/atoms/Select'
 import { userSelector } from '../../store/features/user'
 import { useAppSelector } from '../../store/hooks'
+import { IImagingForm, imagingFormDefaultValue } from '../../types/imaging'
 import { Message } from '../../types/message'
-
-interface IImagingForm {
-  startSequence: {
-    cooling: {
-      temperature: number
-      duration: number
-    }
-  }
-  imagingSequence: {
-    target: {
-      name: string
-      rotation: number
-      ra: {
-        hours: number
-        minutes: number
-        seconds: number
-      }
-      dec: {
-        degrees: number
-        minutes: number
-        seconds: number
-      }
-    }
-    tracking: {
-      mode: 0 | 1 | 2 | 3 | 5
-    }
-    guiding: {
-      forceCalibration: boolean
-    }
-    exposures: {
-      gain: number
-      time: number
-      amount: number
-      binning: number
-      imageType: number
-      filterPosition: number
-    }[]
-  }
-  endSequence: {
-    warming: {
-      duration: number
-    }
-  }
-}
 
 export default function Imaging() {
   const { currentUser } = useAppSelector(userSelector)
@@ -70,81 +28,15 @@ export default function Imaging() {
   )
 }
 
-const defaultValues: IImagingForm = {
-  startSequence: {
-    cooling: {
-      temperature: -10,
-      duration: 5,
-    },
-  },
-  imagingSequence: {
-    target: {
-      name: '',
-      rotation: 0,
-      ra: {
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-      },
-      dec: {
-        degrees: 0,
-        minutes: 0,
-        seconds: 0,
-      },
-    },
-    tracking: {
-      mode: 0,
-    },
-    guiding: {
-      forceCalibration: false,
-    },
-    exposures: [
-      {
-        gain: 0,
-        time: 300,
-        amount: 1,
-        binning: 1,
-        imageType: 0,
-        filterPosition: 0,
-      },
-      {
-        gain: 0,
-        time: 300,
-        amount: 1,
-        binning: 1,
-        imageType: 0,
-        filterPosition: 0,
-      },
-      {
-        gain: 0,
-        time: 300,
-        amount: 1,
-        binning: 1,
-        imageType: 0,
-        filterPosition: 0,
-      },
-    ],
-  },
-  endSequence: {
-    warming: {
-      duration: 5,
-    },
-  },
-}
-
 function ImagingWebSocket({ userId }: { userId: string }) {
-  const { register, handleSubmit, control } = useForm<IImagingForm>({
-    defaultValues,
-  })
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'imagingSequence.exposures',
+  const { register, handleSubmit } = useForm<IImagingForm>({
+    defaultValues: imagingFormDefaultValue,
   })
   const { lastJsonMessage, readyState, sendJsonMessage } = useWebSocket(
     `${process.env.NEXT_PUBLIC_WEB_SOCKET_URL || 'ws://localhost:8080'}/web`,
     {
       queryParams: {
-        userId: userId,
+        userId,
         deviceId: 'Test Device Id',
       },
       onError: (event) => {
@@ -152,8 +44,9 @@ function ImagingWebSocket({ userId }: { userId: string }) {
         toast.error('Connect to WebSocket failed')
       },
       onOpen: () => {
-        toast.success('Connected successfully')
+        console.info('Connected to WebSocket successfully')
         sendJsonMessage({ type: 'getFilterWheelOptions' })
+        sendJsonMessage({ type: 'getCurrentStatus' })
       },
     },
   )
@@ -172,11 +65,18 @@ function ImagingWebSocket({ userId }: { userId: string }) {
         toast.info(message.payload.message)
         break
       }
+      case 'currentStatus': {
+        toast.info('Current status ' + message.payload.status)
+        break
+      }
     }
   }, [lastJsonMessage, readyState])
 
   const onAcquireImage: SubmitHandler<IImagingForm> = (value) => {
-    console.log(value)
+    sendJsonMessage({
+      type: 'runImagingSequence',
+      payload: { ...value } as unknown as JsonValue,
+    })
   }
 
   return (
@@ -224,23 +124,17 @@ function ImagingWebSocket({ userId }: { userId: string }) {
                 <Input
                   type="number"
                   label="Hours"
-                  {...register('imagingSequence.target.ra.hours', {
-                    valueAsNumber: true,
-                  })}
+                  {...register('imagingSequence.target.ra.hours')}
                 />
                 <Input
                   type="number"
                   label="Minutes"
-                  {...register('imagingSequence.target.ra.minutes', {
-                    valueAsNumber: true,
-                  })}
+                  {...register('imagingSequence.target.ra.minutes')}
                 />
                 <Input
                   type="number"
                   label="Seconds"
-                  {...register('imagingSequence.target.ra.seconds', {
-                    valueAsNumber: true,
-                  })}
+                  {...register('imagingSequence.target.ra.seconds')}
                 />
               </div>
             </div>
@@ -252,23 +146,17 @@ function ImagingWebSocket({ userId }: { userId: string }) {
                 <Input
                   type="number"
                   label="Degrees"
-                  {...register('imagingSequence.target.dec.degrees', {
-                    valueAsNumber: true,
-                  })}
+                  {...register('imagingSequence.target.dec.degrees')}
                 />
                 <Input
                   type="number"
                   label="Minutes"
-                  {...register('imagingSequence.target.dec.minutes', {
-                    valueAsNumber: true,
-                  })}
+                  {...register('imagingSequence.target.dec.minutes')}
                 />
                 <Input
                   type="number"
                   label="Seconds"
-                  {...register('imagingSequence.target.dec.seconds', {
-                    valueAsNumber: true,
-                  })}
+                  {...register('imagingSequence.target.dec.seconds')}
                 />
               </div>
             </div>
@@ -290,93 +178,41 @@ function ImagingWebSocket({ userId }: { userId: string }) {
               {...register('imagingSequence.guiding.forceCalibration')}
             />
           </div>
-          <div className="mb-3 flex items-center justify-between">
-            <p className="text-sm font-semibold">Exposure</p>
-            <Button
-              btnStyle="secondary"
-              onClick={() =>
-                append({
-                  amount: 1,
-                  time: 300,
-                  imageType: 0,
-                  binning: 1,
-                  gain: 100,
-                  filterPosition: 0,
-                })
-              }>
-              &#43; new item
-            </Button>
+          <p className="text-sm font-semibold">Exposure</p>
+          <div className="mb-3 grid grid-cols-1 md:grid-cols-4 md:gap-6">
+            <Input
+              type="number"
+              label="Time (s)"
+              {...register('imagingSequence.exposures.time', {
+                valueAsNumber: true,
+              })}
+            />
+            <Select
+              label="Type"
+              {...register('imagingSequence.exposures.imageType')}>
+              <option value={'LIGHT'}>LIGHT</option>
+              <option value={'FLAT'}>FLAT</option>
+              <option value={'DARK'}>DARK</option>
+              <option value={'BIAS'}>BIAS</option>
+              <option value={'DARKFLAT'}>DARKFLAT</option>
+              <option value={'SNAPSHOT'}>SNAPSHOT</option>
+            </Select>
+            <Select
+              label="Binning"
+              {...register('imagingSequence.exposures.binning')}>
+              <option value={'1x1'}>1x1</option>
+              <option value={'2x2'}>2x2</option>
+              <option value={'3x3'}>3x3</option>
+              <option value={'4x4'}>4x4</option>
+            </Select>
+            <Input
+              type="number"
+              label="Gain"
+              {...register('imagingSequence.exposures.gain', {
+                valueAsNumber: true,
+              })}
+            />
           </div>
-          {fields.map((field, index) => (
-            <div
-              key={field.id}
-              className="mb-3 grid grid-cols-1 md:grid-cols-7 md:gap-6">
-              <Input
-                type="number"
-                label="Amount"
-                {...register(`imagingSequence.exposures.${index}.amount`, {
-                  valueAsNumber: true,
-                })}
-              />
-              <Input
-                type="number"
-                label="Time (s)"
-                {...register(`imagingSequence.exposures.${index}.time`, {
-                  valueAsNumber: true,
-                })}
-              />
-              <Select
-                label="Type"
-                {...register(`imagingSequence.exposures.${index}.imageType`, {
-                  valueAsNumber: true,
-                })}>
-                <option value={0}>LIGHT</option>
-                <option value={1}>FLAT</option>
-                <option value={2}>DARK</option>
-                <option value={3}>BIAS</option>
-                <option value={4}>DARKFLAT</option>
-                <option value={5}>SNAPSHOT</option>
-              </Select>
-              <Select
-                label="Binning"
-                {...register(`imagingSequence.exposures.${index}.binning`)}>
-                <option value={1}>1x1</option>
-                <option value={2}>2x2</option>
-                <option value={3}>3x3</option>
-                <option value={4}>4x4</option>
-              </Select>
-              <Input
-                type="number"
-                label="Gain"
-                {...register(`imagingSequence.exposures.${index}.gain`, {
-                  valueAsNumber: true,
-                })}
-              />
-              <Select
-                label="Filter"
-                {...register(
-                  `imagingSequence.exposures.${index}.filterPosition`,
-                  {
-                    valueAsNumber: true,
-                  },
-                )}>
-                <option value={0}>Red</option>
-                <option value={1}>Green</option>
-                <option value={2}>Blue</option>
-                <option value={3}>Clear</option>
-                <option value={4}>Ha</option>
-                <option value={5}>OIII</option>
-              </Select>
-              <div className="flex items-end">
-                <Button
-                  className="h-fit py-1"
-                  btnStyle="danger"
-                  onClick={() => remove(index)}>
-                  &times;
-                </Button>
-              </div>
-            </div>
-          ))}
           <p className="mb-3 text-lg font-bold">Warming Camera</p>
           <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6">
             <Input
