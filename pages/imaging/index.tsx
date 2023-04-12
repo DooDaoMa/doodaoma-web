@@ -48,6 +48,15 @@ function ImagingWebSocket({ userId }: { userId: string }) {
         sendJsonMessage({ type: 'getFilterWheelOptions' })
         sendJsonMessage({ type: 'getCurrentStatus' })
       },
+      onClose: (event) => {
+        console.info(event)
+      },
+      onReconnectStop: (attempt) => {
+        console.info(attempt)
+      },
+      shouldReconnect: (event) => {
+        return [3000].includes(event.code)
+      },
     },
   )
 
@@ -59,6 +68,7 @@ function ImagingWebSocket({ userId }: { userId: string }) {
       return
     }
     const message = lastJsonMessage as unknown as Message
+    console.info(message)
 
     switch (message.type) {
       case 'sendMessage': {
@@ -183,13 +193,13 @@ function ImagingWebSocket({ userId }: { userId: string }) {
             <Input
               type="number"
               label="Time (s)"
-              {...register('imagingSequence.exposures.time', {
+              {...register('imagingSequence.exposure.time', {
                 valueAsNumber: true,
               })}
             />
             <Select
               label="Type"
-              {...register('imagingSequence.exposures.imageType')}>
+              {...register('imagingSequence.exposure.imageType')}>
               <option value={'LIGHT'}>LIGHT</option>
               <option value={'FLAT'}>FLAT</option>
               <option value={'DARK'}>DARK</option>
@@ -199,7 +209,7 @@ function ImagingWebSocket({ userId }: { userId: string }) {
             </Select>
             <Select
               label="Binning"
-              {...register('imagingSequence.exposures.binning')}>
+              {...register('imagingSequence.exposure.binning')}>
               <option value={'1x1'}>1x1</option>
               <option value={'2x2'}>2x2</option>
               <option value={'3x3'}>3x3</option>
@@ -208,7 +218,7 @@ function ImagingWebSocket({ userId }: { userId: string }) {
             <Input
               type="number"
               label="Gain"
-              {...register('imagingSequence.exposures.gain', {
+              {...register('imagingSequence.exposure.gain', {
                 valueAsNumber: true,
               })}
             />

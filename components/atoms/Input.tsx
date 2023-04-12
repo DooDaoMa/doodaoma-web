@@ -1,22 +1,20 @@
-import { forwardRef } from 'react'
+import { forwardRef, InputHTMLAttributes } from 'react'
 
 type InputProps = {
   label?: string
-  type?: string
-  placeholder?: string
-}
+} & InputHTMLAttributes<HTMLInputElement>
 
 /* eslint-disable react/display-name */
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, placeholder, type = 'text', ...rest }, ref) => {
+  ({ label, ...rest }, ref) => {
     return (
       <div>
         <label htmlFor={label}>{label}</label>
         <input
-          type={type}
+          type="text"
           id={label}
           name={label}
-          placeholder={placeholder}
+          className="block w-full rounded rounded-md border border-gray-300 px-3 py-1 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           ref={ref}
           {...rest}
         />

@@ -15,14 +15,14 @@ export interface IImagingForm {
       name: string
       rotation: number
       ra: {
-        hours: number
-        minutes: number
-        seconds: number
+        hours: string
+        minutes: string
+        seconds: string
       }
       dec: {
-        degrees: number
-        minutes: number
-        seconds: number
+        degrees: string
+        minutes: string
+        seconds: string
       }
     }
     tracking: {
@@ -31,7 +31,7 @@ export interface IImagingForm {
     guiding: {
       forceCalibration: boolean
     }
-    exposures: {
+    exposure: {
       gain: number
       time: number
       binning: string
@@ -57,14 +57,14 @@ export const imagingFormDefaultValue: IImagingForm = {
       name: '',
       rotation: 0,
       ra: {
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
+        hours: '0',
+        minutes: '0',
+        seconds: '0',
       },
       dec: {
-        degrees: 0,
-        minutes: 0,
-        seconds: 0,
+        degrees: '0',
+        minutes: '0',
+        seconds: '0',
       },
     },
     tracking: {
@@ -73,7 +73,7 @@ export const imagingFormDefaultValue: IImagingForm = {
     guiding: {
       forceCalibration: false,
     },
-    exposures: {
+    exposure: {
       gain: 100,
       time: 300,
       binning: '1x1',
@@ -86,3 +86,6 @@ export const imagingFormDefaultValue: IImagingForm = {
     },
   },
 }
+
+export const blackPlaceholderUrl =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='

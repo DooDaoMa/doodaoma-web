@@ -7,6 +7,7 @@ import { Button } from '../../components'
 import { fetchMyImages, gallerySelector } from '../../store/features/gallery'
 import { currentUserSelector } from '../../store/features/user'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { blackPlaceholderUrl } from '../../types/imaging'
 
 export default function Gallery() {
   const dispatch = useAppDispatch()
@@ -49,14 +50,18 @@ export default function Gallery() {
         {images.length > 0 &&
           images.map((image) => (
             <div
-              className="relative h-48 overflow-hidden rounded-md lg:h-[320px]"
+              className="relative h-[120px] overflow-hidden rounded-md md:h-[160px] lg:h-[240px]"
               key={image.id}>
               <Image
                 className="object-cover"
                 src={image.imageUrl}
                 alt={image.name}
-                priority
+                placeholder="blur"
+                blurDataURL={blackPlaceholderUrl}
                 fill
+                sizes="(max-width: 768px) 100vw,
+                (max-width: 1200px) 50vw,
+                33vw"
               />
             </div>
           ))}
