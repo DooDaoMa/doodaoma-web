@@ -1,4 +1,10 @@
-import { addDays, format, parseJSON, startOfToday } from 'date-fns'
+import {
+  addDays,
+  format,
+  formatDistanceToNow,
+  parseJSON,
+  startOfToday,
+} from 'date-fns'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
@@ -36,19 +42,25 @@ export const UpcomingSection = () => {
         {upcoming.length > 0 ? (
           <>
             <p>
-              Start: {format(parseJSON(upcoming[0]?.startTime), 'HH:mm aa')}
+              next in {formatDistanceToNow(parseJSON(upcoming[0]?.startTime))}
             </p>
             <p>
-              End:{' '}
+              {format(parseJSON(upcoming[0]?.startTime), 'dd E HH:mm aa')} to{' '}
+              <br />
               {format(
                 parseJSON(upcoming[upcoming.length - 1]?.endTime),
-                'HH:mm aa',
+                'dd E HH:mm aa',
               )}
             </p>
           </>
-        ) : null}
-        <p>no upcoming reservation</p>
-        <Button onClick={() => router.push('/signin')}>reserve</Button>
+        ) : (
+          <>
+            <p className="my-4 text-center dark:text-slate-200">
+              no upcoming reservation
+            </p>
+            <Button onClick={() => router.push('/reservation')}>reserve</Button>
+          </>
+        )}
       </>
     </Section>
   )

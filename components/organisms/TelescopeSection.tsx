@@ -22,7 +22,7 @@ export const TelescopeSection = () => {
     },
   ]
   return (
-    <Section>
+    <Section className="col-start-3 row-start-3">
       <>
         <div className="feed-card-header">Available Telescope</div>
         <ul>

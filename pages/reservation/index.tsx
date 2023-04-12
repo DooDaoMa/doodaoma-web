@@ -97,12 +97,14 @@ export default function ReservationPage() {
         isPrimaryBtnDisabled={schedule.length < 1}
         handleSubmit={() => onConfirm()}>
         <h3 className="mb-2 text-xl font-semibold">Selected Time Slots:</h3>
-        {schedule.map((timeSlot, i) => (
-          <div key={i}>
-            {format(timeSlot, 'dd eee H:mm aaaa')} -{' '}
-            {format(addMinutes(timeSlot, 59), 'H:mm aaaa')}
-          </div>
-        ))}
+        <div className="max-h-96 overflow-y-auto">
+          {schedule.map((timeSlot, i) => (
+            <div key={i}>
+              {format(timeSlot, 'dd eee H:mm aaaa')} -{' '}
+              {format(addMinutes(timeSlot, 59), 'H:mm aaaa')}
+            </div>
+          ))}
+        </div>
         <p>total: {schedule.length} hour(s)</p>
       </Modal>
       <Section>

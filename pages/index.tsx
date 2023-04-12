@@ -32,9 +32,11 @@ export default function Home() {
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
         <UpcomingSection />
         {weather ? <WeatherSection content={weather} /> : <Loading />}
-        {moonPhase ? <MoonPhaseSection content={moonPhase} /> : <Loading />}
+        <div className="row-span-3 flex flex-col gap-y-8">
+          {moonPhase ? <MoonPhaseSection content={moonPhase} /> : <Loading />}
+          <TelescopeSection />
+        </div>
         {apod ? <APODSection content={apod} /> : <Loading />}
-        <TelescopeSection />
       </div>
     </>
   )
