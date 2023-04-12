@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 import { APODData } from '../../types'
@@ -15,11 +16,11 @@ export const APODSection = ({ content }: APODSectionProps) => {
       <>
         <div className="feed-card-header">{content.title}</div>
         <Link href={content.hdurl} target="_blank">
-          <div className="relative mb-2 w-full">
-            <img src={content.url} alt="astronomy picture of the day" />
+          <div className="relative mb-2 min-h-[300px] w-full">
+            <Image src={content.url} fill alt="astronomy picture of the day" />
           </div>
         </Link>
-        <p className="text-center text-sm italic text-gray-600">
+        <p className="text-center text-sm italic text-gray-600 dark:text-slate-300">
           &#169; {content.copyright}
         </p>
         <ReadMore>{content.explanation}</ReadMore>
