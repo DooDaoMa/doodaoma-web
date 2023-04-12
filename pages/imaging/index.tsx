@@ -59,6 +59,9 @@ function ImagingWebSocket({ userId }: { userId: string }) {
       shouldReconnect: (event) => {
         return [3000].includes(event.code)
       },
+      onReconnectStop: (attempt) => {
+        console.info(attempt)
+      },
     },
   )
 
