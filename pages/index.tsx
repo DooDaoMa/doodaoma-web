@@ -28,27 +28,21 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <h1 className="mb-4 text-3xl font-bold capitalize">welcome</h1>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          {loadContentState.status === 'success' ? (
-            <>
-              <UpcomingSection />
-              {weather ? <WeatherSection content={weather} /> : <Loading />}
-              {moonPhase ? (
-                <MoonPhaseSection content={moonPhase} />
-              ) : (
-                <Loading />
-              )}
-              {apod ? <APODSection content={apod} /> : <Loading />}
-            </>
-          ) : (
-            <div className="grid-span-3">
-              <Loading />
-            </div>
-          )}
-        </div>
-      </main>
+      <h1 className="mb-4 text-3xl font-bold capitalize">welcome</h1>
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+        {loadContentState.status === 'success' ? (
+          <>
+            <UpcomingSection />
+            {weather ? <WeatherSection content={weather} /> : <Loading />}
+            {moonPhase ? <MoonPhaseSection content={moonPhase} /> : <Loading />}
+            {apod ? <APODSection content={apod} /> : <Loading />}
+          </>
+        ) : (
+          <div className="grid-span-3">
+            <Loading />
+          </div>
+        )}
+      </div>
     </>
   )
 }
