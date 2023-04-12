@@ -14,7 +14,7 @@
   nav {
     @apply top-0 min-h-[73px] 
       border-b border-white bg-white 
-      px-4 py-4
+      px-4 py-4 z-20
       shadow-md dark:border-transparent
       dark:bg-gray-900 dark:shadow-2xl
       sm:sticky sm:flex sm:items-center sm:px-12;
