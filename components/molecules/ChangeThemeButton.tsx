@@ -1,14 +1,28 @@
 import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
 import { TbMoonStars, TbSun } from 'react-icons/tb'
 
 export const ChangeThemeButton = () => {
-  const { theme, setTheme } = useTheme()
-  console.log(theme)
+  const { systemTheme, theme, setTheme } = useTheme()
+  const [currentTheme, setCurrentTheme] = useState<string>('')
+
+  useEffect(() => {
+    if (systemTheme && theme) {
+      setCurrentTheme(theme === 'system' ? systemTheme : theme)
+    }
+  }, [])
+
   const onChangeTheme = () => {
-    theme == 'dark' ? setTheme('light') : setTheme('dark')
+    if (currentTheme === 'dark') {
+      setCurrentTheme('light')
+      setTheme('light')
+    } else {
+      setTheme('dark')
+      setCurrentTheme('dark')
+    }
   }
 
-  return theme === 'dark' ? (
+  return currentTheme === 'dark' ? (
     <TbMoonStars
       className="h-6 w-6 cursor-pointer text-slate-400"
       onClick={() => onChangeTheme()}
