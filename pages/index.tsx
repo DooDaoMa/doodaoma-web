@@ -7,8 +7,11 @@ import {
   WeatherSection,
   UpcomingSection,
   TelescopeSection,
+<<<<<<< HEAD
   TargetSection,
   ForecastSection,
+=======
+>>>>>>> 57535c5 (add Head)
 } from '../components'
 import {
   feedSelector,
