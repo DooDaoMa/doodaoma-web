@@ -52,3 +52,14 @@ export const groupDate = (dateList: any[]) => {
     return acc
   }, {})
 }
+
+export const groupReserveDate = (dateList: Date[]) => {
+  return dateList.reduce((acc: Record<string, Date[]>, curr) => {
+    const date = curr.toDateString()
+    if (!acc[date]) {
+      acc[date] = []
+    }
+    acc[date].push(curr)
+    return acc
+  }, {})
+}

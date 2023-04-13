@@ -5,7 +5,6 @@ import {
   parseJSON,
   isSameHour,
   isEqual,
-  addMinutes,
 } from 'date-fns'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
@@ -16,6 +15,7 @@ import { reserveTimeSlot } from '../../store/features/reservation'
 import { fetchTimeSlot, timeSlotSelector } from '../../store/features/timeslot'
 import { userSelector } from '../../store/features/user'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { groupReserveDate } from '../../utils/dateTime'
 
 export default function ReservationPage() {
   const dispatch = useAppDispatch()
@@ -98,12 +98,18 @@ export default function ReservationPage() {
         handleSubmit={() => onConfirm()}>
         <h3 className="mb-2 text-xl font-semibold">Selected Time Slots:</h3>
         <div className="max-h-96 overflow-y-auto">
-          {schedule.map((timeSlot, i) => (
-            <div key={i}>
-              {format(timeSlot, 'dd eee H:mm aaaa')} -{' '}
-              {format(addMinutes(timeSlot, 59), 'H:mm aaaa')}
-            </div>
-          ))}
+          <>
+            {Object.entries(groupReserveDate(schedule)).map(([key, value]) => (
+              <div key={key} className="mb-2">
+                <p className="font-semibold">{key}</p>
+                <div>
+                  {format(value[0], 'hh:mm aaaa')} to{' '}
+                  {format(value[value.length - 1], 'hh:mm aaaa')}
+                </div>
+                <div>{value.length} hours</div>
+              </div>
+            ))}
+          </>
         </div>
         <p>total: {schedule.length} hour(s)</p>
       </Modal>

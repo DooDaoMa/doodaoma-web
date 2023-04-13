@@ -1,14 +1,13 @@
 import { format } from 'date-fns'
-import Image from 'next/image'
 import { TbSunrise, TbSunset } from 'react-icons/tb'
 
-import { WeatherData } from '../../types'
+import { ForecastData } from '../../types'
 import { Loading } from '../atoms/Loading'
 
 import { Section } from './Section'
 
 type WeatherSectionProps = {
-  content: WeatherData | null
+  content: ForecastData | null
 }
 
 export const WeatherSection = ({ content }: WeatherSectionProps) => {
@@ -18,16 +17,21 @@ export const WeatherSection = ({ content }: WeatherSectionProps) => {
         {content ? (
           <>
             <div className="feed-card-header">Weather Today</div>
-            <div className="flex items-center">
-              <p>{content?.main}</p>
-              <Image
-                src={`http://openweathermap.org/img/w/${content?.icon}.png`}
-                width={32}
-                height={32}
-                alt="weather icon"
-              />
-            </div>
-            <p className="italic">{content?.description}</p>
+            {/* {content?.weatherList.map((ele, i) => (
+              <div key={i} className="mb-2 rounded-md bg-slate-700">
+                <div className="flex items-center">
+                  <p>{ele.main}</p>
+                  <p>{format(ele.time, 'dd E hh:mm aaaa')}</p>
+                  <Image
+                    src={`http://openweathermap.org/img/w/${ele?.icon}.png`}
+                    width={32}
+                    height={32}
+                    alt="weather icon"
+                  />
+                </div>
+                <p className="italic">{ele?.description}</p>
+              </div>
+            ))} */}
             <div className="flex flex-wrap gap-x-2 gap-y-2">
               <p className="flex items-center gap-x-2">
                 <TbSunset className="h-6 w-6 text-red-400" />
