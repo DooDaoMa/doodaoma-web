@@ -3,11 +3,11 @@ import { useEffect } from 'react'
 
 import {
   APODSection,
-  Loading,
   MoonPhaseSection,
   WeatherSection,
   UpcomingSection,
   TelescopeSection,
+  TargetSection,
 } from '../components'
 import { feedSelector, fetchFeedContent } from '../store/features/feed'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
@@ -31,12 +31,13 @@ export default function Home() {
       <h1 className="mb-4 text-3xl font-bold capitalize">welcome</h1>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
         <UpcomingSection />
-        {weather ? <WeatherSection content={weather} /> : <Loading />}
+        <WeatherSection content={weather} />
         <div className="row-span-3 flex flex-col gap-y-8">
-          {moonPhase ? <MoonPhaseSection content={moonPhase} /> : <Loading />}
+          <MoonPhaseSection content={moonPhase} />
           <TelescopeSection />
         </div>
-        {apod ? <APODSection content={apod} /> : <Loading />}
+        <APODSection content={apod} />
+        <TargetSection />
       </div>
     </>
   )
