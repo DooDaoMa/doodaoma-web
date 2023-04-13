@@ -1,8 +1,6 @@
 import axios from 'axios'
 
-const baseURL =
-  process.env.NEXT_PUBLIC_BASE_URL ||
-  'https://doodaoma-server-dev.up.railway.app/'
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL
 
 const axiosAccountAPI = axios.create({
   baseURL: `${baseURL}`,

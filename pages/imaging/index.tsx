@@ -32,7 +32,7 @@ function ImagingWebSocket({ userId }: { userId: string }) {
     defaultValues: imagingFormDefaultValue,
   })
   const { lastJsonMessage, readyState, sendJsonMessage } = useWebSocket(
-    `${process.env.NEXT_PUBLIC_WEB_SOCKET_URL || 'ws://localhost:8080'}/web`,
+    `${process.env.NEXT_PUBLIC_WEB_SOCKET_URL}/web`,
     {
       queryParams: {
         userId,
