@@ -24,7 +24,7 @@ export const ChangeThemeButton = () => {
 
   return currentTheme === 'dark' ? (
     <TbMoonStars
-      className="h-6 w-6 cursor-pointer text-slate-400"
+      className="h-6 w-6 cursor-pointer text-slate-100"
       onClick={() => onChangeTheme()}
     />
   ) : (
