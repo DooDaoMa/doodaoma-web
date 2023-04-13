@@ -8,16 +8,22 @@ import {
   UpcomingSection,
   TelescopeSection,
   TargetSection,
+  ForecastSection,
 } from '../components'
-import { feedSelector, fetchFeedContent } from '../store/features/feed'
+import {
+  feedSelector,
+  fetchFeedContent,
+  fetchWeather,
+} from '../store/features/feed'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 
 export default function Home() {
   const dispatch = useAppDispatch()
-  const { weather, moonPhase, apod } = useAppSelector(feedSelector)
+  const { forecastData, moonPhase, apod } = useAppSelector(feedSelector)
 
   useEffect(() => {
     dispatch(fetchFeedContent())
+    dispatch(fetchWeather({}))
   }, [])
 
   return (
@@ -31,13 +37,14 @@ export default function Home() {
       <h1 className="mb-4 text-3xl font-bold capitalize">welcome</h1>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
         <UpcomingSection />
-        <WeatherSection content={weather} />
+        <WeatherSection content={forecastData} />
         <div className="row-span-3 flex flex-col gap-y-8">
           <MoonPhaseSection content={moonPhase} />
           <TelescopeSection />
         </div>
         <APODSection content={apod} />
         <TargetSection />
+        <ForecastSection content={forecastData} />
       </div>
     </>
   )
