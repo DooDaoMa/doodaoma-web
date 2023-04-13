@@ -4,17 +4,23 @@ import { fromUnixTime } from 'date-fns'
 import {
   ErrorTypes,
   MoonPhaseData,
-  WeatherData,
   APODData,
   IDSO,
   DSOResponse,
+  ForecastData,
 } from '../../../types'
+import { groupDate } from '../../../utils/dateTime'
 
-import { fetchDSOData, fetchFeedContent, resetFeedContent } from './actions'
+import {
+  fetchDSOData,
+  fetchFeedContent,
+  fetchWeather,
+  resetFeedContent,
+} from './actions'
 
 interface InitialStateProps {
   moonPhase: MoonPhaseData | null
-  weather: WeatherData | null
+  forecastData: ForecastData | null
   apod: APODData | null
   dsoList: IDSO[] | null
   loadContentState: {
@@ -25,11 +31,15 @@ interface InitialStateProps {
     status: string
     error: ErrorTypes | null
   }
+  loadWeatherState: {
+    status: string
+    error: ErrorTypes | null
+  }
 }
 
 const initialState: InitialStateProps = {
   moonPhase: null,
-  weather: null,
+  forecastData: null,
   apod: null,
   dsoList: null,
   loadContentState: {
@@ -37,6 +47,10 @@ const initialState: InitialStateProps = {
     error: null,
   },
   loadDSOListState: {
+    status: 'idle',
+    error: null,
+  },
+  loadWeatherState: {
     status: 'idle',
     error: null,
   },
@@ -51,14 +65,6 @@ export const feedReducer = createReducer(initialState, (builder) => {
     .addCase(fetchFeedContent.fulfilled, (state, { payload }) => {
       state.loadContentState.status = 'success'
       state.moonPhase = payload.moonPhase
-      state.weather = {
-        sunset: fromUnixTime(payload.weather.sys.sunset),
-        sunrise: fromUnixTime(payload.weather.sys.sunrise),
-        main: payload.weather.weather[0].main,
-        description: payload.weather.weather[0].description,
-        icon: payload.weather.weather[0].icon,
-        id: payload.weather.weather[0].id,
-      }
       state.apod = payload.apod
     })
     .addCase(fetchFeedContent.rejected, (state, { payload }) => {
@@ -83,8 +89,27 @@ export const feedReducer = createReducer(initialState, (builder) => {
       state.loadDSOListState.status = 'error'
       state.loadDSOListState.error = payload as ErrorTypes
     })
+    .addCase(fetchWeather.pending, (state) => {
+      state.loadWeatherState.status = 'pending'
+      state.loadWeatherState.error = null
+    })
+    .addCase(fetchWeather.fulfilled, (state, { payload }) => {
+      state.loadWeatherState.status = 'success'
+
+      const group = groupDate(payload.list)
+      console.log('group', group)
+      state.forecastData = {
+        sunset: fromUnixTime(payload.city.sunset),
+        sunrise: fromUnixTime(payload.city.sunrise),
+        weatherList: group,
+      }
+    })
+    .addCase(fetchWeather.rejected, (state, { payload }) => {
+      state.loadWeatherState.status = 'error'
+      state.loadWeatherState.error = payload as ErrorTypes
+    })
     .addCase(resetFeedContent, (state) => {
       state.moonPhase = null
-      state.weather = null
+      state.forecastData = null
     })
 })

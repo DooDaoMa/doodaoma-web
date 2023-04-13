@@ -1,13 +1,29 @@
 export type MoonPhaseData = {
   imageUrl: string
 }
+
+export type ForecastData = {
+  sunset: Date
+  sunrise: Date
+  weatherList: Record<string, WeatherData[]>
+}
+
+export type WeatherForecastResponse = {
+  weather: {
+    id: number
+    main: string
+    description: string
+    icon: string
+  }[]
+  dt: number
+}
+
 export type WeatherData = {
   main: string
   description: string
   icon: string
   id: number
-  sunset: Date
-  sunrise: Date
+  time: Date
 }
 
 export type APODData = {

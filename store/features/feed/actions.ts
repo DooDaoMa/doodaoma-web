@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createAction,
   createAsyncThunk as nativeCreateAsyncThunk,
@@ -19,7 +20,7 @@ export const fetchDSOData = createAsyncThunk({
   EVENT_NAME: 'load dso data',
 })
 
-export const fetchWeatherRes = createAsyncThunk({
+export const fetchWeather = createAsyncThunk({
   api: loadWeather,
   EVENT_NAME: 'loadWeatherAPI',
 })
@@ -34,16 +35,13 @@ export const fetchFeedContent = nativeCreateAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const moonPhaseRes = await loadMoonPhase()
-      const weatherRes = await loadWeather()
       const apodRes = await loadAPOD()
 
       const moonPhaseData = moonPhaseRes?.data.data
-      const weatherData = weatherRes?.data
       const apodData = apodRes?.data
 
       return {
         moonPhase: moonPhaseData,
-        weather: weatherData,
         apod: apodData,
       }
     } catch (error: any) {

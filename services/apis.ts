@@ -99,7 +99,7 @@ export const loadWeather = () => {
       skipNulls: true,
     },
   )
-  return axios.get(`https://api.openweathermap.org/data/2.5/weather${query}`)
+  return axios.get(`https://api.openweathermap.org/data/2.5/forecast${query}`)
 }
 
 export const loadAPOD = () => {
