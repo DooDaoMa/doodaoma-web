@@ -34,7 +34,7 @@ export const Navigation = () => {
           <MenuItem
             icon={<IoTelescope className="h-5 w-5" />}
             to="/imaging"
-            isSelected={selected === 'imaging'}
+            isSelected={selected === '/imaging'}
           />
           <MenuItem
             icon={<BsCalendarEvent className="h-5 w-5" />}
