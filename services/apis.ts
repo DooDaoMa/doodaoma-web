@@ -6,6 +6,7 @@ import {
   SignUpProps,
   AvailableReservationQueryParams,
   UpdateTimeSlotProps,
+  DSOQueryParams,
 } from '../types'
 
 import { axiosAccountAPI, axiosAuthAPI, axiosContentAPI } from './axios'
@@ -113,4 +114,22 @@ export const loadAPOD = () => {
     },
   )
   return axios.get(`https://api.nasa.gov/planetary/apod${query}`)
+}
+
+export const loadDSO = (filter: DSOQueryParams) => {
+  const query = qs.stringify(
+    {
+      q: filter.q,
+      dataset: 'deep-sky-objects',
+      timezone: 'Asia/Bangkok',
+      'refine.type': filter.type,
+      'refine.const': filter.constellation,
+      'refine.cat1': filter.cat1,
+    },
+    {
+      addQueryPrefix: true,
+      skipNulls: true,
+    },
+  )
+  return axios.get(`https://www.datastro.eu/api/records/1.0/search/${query}`)
 }

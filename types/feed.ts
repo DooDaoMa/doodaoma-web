@@ -20,3 +20,28 @@ export type APODData = {
   title: string
   url: string
 }
+
+export type DSOQueryParams = {
+  q?: string
+  type?: string
+  constellation?: string
+  cat1?: string
+}
+
+export type IDSO = {
+  ra: number
+  dec: number
+  id: number
+  name: string
+  cat1: string
+}
+
+export type DSOResponse = {
+  fields: {
+    id1: number
+    dec: number
+    ra: number
+    name?: string
+    cat1: string
+  }
+}
