@@ -31,7 +31,10 @@
       text-sm font-medium
       text-gray-700 dark:text-white;
   }
-  input,
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
   textarea,
   select {
     @apply block w-full rounded-md
@@ -41,6 +44,9 @@
   }
   a {
     @apply font-medium text-blue-500 dark:text-blue-500;
+  }
+  input[type="checkbox"] {
+    @apply bg-white pt-0.5;
   }
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
