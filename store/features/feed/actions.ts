@@ -9,6 +9,7 @@ import {
   loadDSO,
   loadMoonPhase,
   loadWeather,
+  loadForecast,
 } from '../../../services/apis'
 import createAsyncThunk from '../../middleware/customCreateThunk'
 
@@ -28,6 +29,11 @@ export const fetchWeather = createAsyncThunk({
 export const fetchMoonPhase = createAsyncThunk({
   api: loadMoonPhase,
   EVENT_NAME: 'loadMoonPhaseAPI',
+})
+
+export const fetchForecast = createAsyncThunk({
+  api: loadForecast,
+  EVENT_NAME: 'loadForecastAPI',
 })
 
 export const fetchFeedContent = nativeCreateAsyncThunk(

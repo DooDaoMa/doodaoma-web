@@ -99,6 +99,22 @@ export const loadWeather = () => {
       skipNulls: true,
     },
   )
+  return axios.get(`https://api.openweathermap.org/data/2.5/weather${query}`)
+}
+
+export const loadForecast = () => {
+  if (!process.env.NEXT_PUBLIC_OPEN_WEATHER_KEY) return
+  const query = qs.stringify(
+    {
+      lat: 13.44,
+      lon: 100.31,
+      appid: process.env.NEXT_PUBLIC_OPEN_WEATHER_KEY,
+    },
+    {
+      addQueryPrefix: true,
+      skipNulls: true,
+    },
+  )
   return axios.get(`https://api.openweathermap.org/data/2.5/forecast${query}`)
 }
 
