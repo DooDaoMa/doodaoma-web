@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import Router from 'next/router'
 import { ReactNode, useEffect } from 'react'
 
 import { currentUserSelector, userSelector } from '../../store/features/user'
@@ -9,9 +9,9 @@ type Props = {
 }
 
 export const RouteGuard = ({ children }: Props) => {
-  const router = useRouter()
   const currentUser = useAppSelector(currentUserSelector)
   const { restoreUserState } = useAppSelector(userSelector)
+  console.log(currentUser, restoreUserState)
 
   useEffect(() => {
     if (
@@ -20,8 +20,9 @@ export const RouteGuard = ({ children }: Props) => {
     ) {
       return
     }
+    console.log('push')
     if (currentUser === null) {
-      router.push('/signin')
+      Router.push('/signin')
     }
   }, [currentUser, restoreUserState])
 

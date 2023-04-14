@@ -22,7 +22,7 @@ export default function Gallery() {
       return
     }
     dispatch(fetchMyImages(undefined))
-  }, [currentUser, images])
+  }, [currentUser, images, dispatch])
 
   useEffect(() => {
     if (fetchMyImagesState.error) {

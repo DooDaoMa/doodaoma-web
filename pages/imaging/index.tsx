@@ -1,17 +1,16 @@
 import Head from 'next/head'
-import { useEffect } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useEffect, useMemo } from 'react'
 import { toast } from 'react-toastify'
 import { ReadyState } from 'react-use-websocket'
 import { JsonValue } from 'react-use-websocket/dist/lib/types'
 import { useWebSocket } from 'react-use-websocket/dist/lib/use-websocket'
 
-import { Button, Input, Section } from '../../components'
-import { Checkbox } from '../../components/atoms/Checkbox'
-import { Select } from '../../components/atoms/Select'
+import { Section } from '../../components'
+import { ImagingForm } from '../../components/molecules/ImagingForm'
+import { selectImaging, setImagingStatus } from '../../store/features/imaging'
 import { userSelector } from '../../store/features/user'
-import { useAppSelector } from '../../store/hooks'
-import { IImagingForm, imagingFormDefaultValue } from '../../types/imaging'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { IImagingForm } from '../../types/imaging'
 import { Message } from '../../types/message'
 
 export default function Imaging() {
@@ -29,12 +28,14 @@ export default function Imaging() {
 }
 
 function ImagingWebSocket({ userId }: { userId: string }) {
-  const { register, handleSubmit } = useForm<IImagingForm>({
-    defaultValues: imagingFormDefaultValue,
-  })
+  const dispatch = useAppDispatch()
+  const { imagingStatus } = useAppSelector(selectImaging)
+
   const { lastJsonMessage, readyState, sendJsonMessage } = useWebSocket(
     `${process.env.NEXT_PUBLIC_WEB_SOCKET_URL}/web`,
     {
+      retryOnError: true,
+      reconnectInterval: 10 * 1000,
       queryParams: {
         userId,
         deviceId: 'Test Device Id',
@@ -45,14 +46,15 @@ function ImagingWebSocket({ userId }: { userId: string }) {
       },
       onOpen: () => {
         console.info('Connected to WebSocket successfully')
+        toast.success('Connection established')
         sendJsonMessage({ type: 'getFilterWheelOptions' })
-        sendJsonMessage({ type: 'getCurrentStatus' })
+        sendJsonMessage({ type: 'getIsBusy' })
       },
       onClose: (event) => {
         console.info(event)
-      },
-      onReconnectStop: (attempt) => {
-        console.info(attempt)
+        if ([3000].includes(event.code)) {
+          toast.error('Connection closed. Retry connecting...')
+        }
       },
       shouldReconnect: (event) => {
         return [3000].includes(event.code)
@@ -61,9 +63,6 @@ function ImagingWebSocket({ userId }: { userId: string }) {
   )
 
   useEffect(() => {
-    if (readyState !== ReadyState.OPEN) {
-      return
-    }
     if (lastJsonMessage === null) {
       return
     }
@@ -75,19 +74,59 @@ function ImagingWebSocket({ userId }: { userId: string }) {
         toast.info(message.payload.message)
         break
       }
-      case 'currentStatus': {
-        toast.info('Current status ' + message.payload.status)
+      case 'updateIsBusy': {
+        const isBusy = message.payload.isBusy
+        dispatch(setImagingStatus(isBusy ? 'busy' : 'ready'))
         break
       }
     }
-  }, [lastJsonMessage, readyState])
+  }, [lastJsonMessage, dispatch])
 
-  const onAcquireImage: SubmitHandler<IImagingForm> = (value) => {
+  useEffect(() => {
+    switch (readyState) {
+      case ReadyState.UNINSTANTIATED:
+        dispatch(setImagingStatus('empty'))
+        break
+      case ReadyState.CLOSED:
+        dispatch(setImagingStatus('not connect'))
+        break
+      case ReadyState.CONNECTING:
+        dispatch(setImagingStatus('connecting'))
+        break
+      case ReadyState.OPEN:
+        dispatch(setImagingStatus('ready'))
+        break
+    }
+  }, [readyState, dispatch])
+
+  const onAcquireImage = (value: IImagingForm) => {
     sendJsonMessage({
       type: 'runImagingSequence',
       payload: { ...value } as unknown as JsonValue,
     })
   }
+
+  const onCancelExposuring = () => {
+    dispatch(setImagingStatus('cancelling'))
+    sendJsonMessage({ type: 'cancelRunningSequence' })
+  }
+
+  const status = useMemo(() => {
+    switch (imagingStatus) {
+      case 'empty':
+        return { text: 'Empty', color: 'bg-zinc-500' }
+      case 'not connect':
+        return { text: 'Not connect', color: 'bg-red-500' }
+      case 'connecting':
+        return { text: 'Connecting', color: 'bg-yellow-500' }
+      case 'ready':
+        return { text: 'Ready', color: 'bg-green-500' }
+      case 'busy':
+        return { text: 'Busy', color: 'bg-orange-500' }
+      case 'cancelling':
+        return { text: 'Cancelling', color: 'bg-amber-500' }
+    }
+  }, [imagingStatus])
 
   return (
     <>
@@ -97,146 +136,24 @@ function ImagingWebSocket({ userId }: { userId: string }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1 className="mb-6 text-3xl font-bold">Imaging</h1>
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Imaging</h1>
+        <p className="flex items-center gap-2">
+          Status: <span className="font-semibold">{status?.text}</span>
+          <span
+            className={`mt-1 inline-block h-3 w-3 rounded-full ${status?.color}`}></span>
+        </p>
+      </div>
       <Section>
-        <form onSubmit={handleSubmit(onAcquireImage)}>
-          <p className="mb-3 text-lg font-bold">Cooling Camera</p>
-          <div className="mb-3 grid grid-cols-1 md:grid-cols-2 md:gap-6">
-            <Input
-              type="number"
-              label="Temperature (°C)"
-              {...register('startSequence.cooling.temperature', {
-                valueAsNumber: true,
-              })}
-            />
-            <Input
-              type="number"
-              label="Duration (minutes)"
-              {...register('startSequence.cooling.duration', {
-                valueAsNumber: true,
-              })}
-            />
-          </div>
-          <p className="mb-3 text-lg font-bold">Imaging</p>
-          <div className="mb-3 grid grid-cols-1 md:grid-cols-2 md:gap-6">
-            <Input label="Name" {...register('imagingSequence.target.name')} />
-            <Input
-              label="Rotation"
-              {...register('imagingSequence.target.rotation')}
-            />
-          </div>
-          <div className="mb-3 grid grid-cols-1 md:grid-cols-2 md:gap-6">
-            <div>
-              <p className="text-sm font-semibold">
-                RA / Right Asc. (hh:mm:ss)
-              </p>
-              <div className="mb-3 grid grid-cols-1 md:grid-cols-3 md:gap-6">
-                <Input
-                  type="number"
-                  label="Hours"
-                  {...register('imagingSequence.target.ra.hours')}
-                />
-                <Input
-                  type="number"
-                  label="Minutes"
-                  {...register('imagingSequence.target.ra.minutes')}
-                />
-                <Input
-                  type="number"
-                  label="Seconds"
-                  {...register('imagingSequence.target.ra.seconds')}
-                />
-              </div>
-            </div>
-            <div>
-              <p className="text-sm font-semibold">
-                DEC / Declination (d:mm:ss)
-              </p>
-              <div className="mb-3 grid grid-cols-1 md:grid-cols-3 md:gap-6">
-                <Input
-                  type="number"
-                  label="Degrees"
-                  {...register('imagingSequence.target.dec.degrees')}
-                />
-                <Input
-                  type="number"
-                  label="Minutes"
-                  {...register('imagingSequence.target.dec.minutes')}
-                />
-                <Input
-                  type="number"
-                  label="Seconds"
-                  {...register('imagingSequence.target.dec.seconds')}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="mb-3 grid grid-cols-1 md:grid-cols-2 md:gap-6">
-            <Select
-              label="Tracking Mode"
-              {...register('imagingSequence.tracking.mode', {
-                valueAsNumber: true,
-              })}>
-              <option value={0}>Sidereal</option>
-              <option value={1}>King</option>
-              <option value={2}>Solar</option>
-              <option value={3}>Lunar</option>
-              <option value={5}>Stopped</option>
-            </Select>
-            <Checkbox
-              label="Force Calibration"
-              {...register('imagingSequence.guiding.forceCalibration')}
-            />
-          </div>
-          <p className="text-sm font-semibold">Exposure</p>
-          <div className="mb-3 grid grid-cols-1 md:grid-cols-4 md:gap-6">
-            <Input
-              type="number"
-              label="Time (s)"
-              {...register('imagingSequence.exposure.time', {
-                valueAsNumber: true,
-              })}
-            />
-            <Select
-              label="Type"
-              {...register('imagingSequence.exposure.imageType')}>
-              <option value={'LIGHT'}>LIGHT</option>
-              <option value={'FLAT'}>FLAT</option>
-              <option value={'DARK'}>DARK</option>
-              <option value={'BIAS'}>BIAS</option>
-              <option value={'DARKFLAT'}>DARKFLAT</option>
-              <option value={'SNAPSHOT'}>SNAPSHOT</option>
-            </Select>
-            <Select
-              label="Binning"
-              {...register('imagingSequence.exposure.binning')}>
-              <option value={'1x1'}>1x1</option>
-              <option value={'2x2'}>2x2</option>
-              <option value={'3x3'}>3x3</option>
-              <option value={'4x4'}>4x4</option>
-            </Select>
-            <Input
-              type="number"
-              label="Gain"
-              {...register('imagingSequence.exposure.gain', {
-                valueAsNumber: true,
-              })}
-            />
-          </div>
-          <p className="mb-3 text-lg font-bold">Warming Camera</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6">
-            <Input
-              type="number"
-              label="Duration (minutes)"
-              {...register('endSequence.warming.duration', {
-                valueAsNumber: true,
-              })}
-            />
-          </div>
-          <Button className="mt-6" type="submit">
-            Acquire images
-          </Button>
-        </form>
+        <ImagingForm
+          isBusy={imagingStatus === 'busy'}
+          isSubmitButtonDisabled={
+            imagingStatus === 'busy' || imagingStatus !== 'ready'
+          }
+          isCancelling={imagingStatus === 'cancelling'}
+          onSubmit={onAcquireImage}
+          onCancel={onCancelExposuring}
+        />
       </Section>
     </>
   )

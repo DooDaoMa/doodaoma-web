@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import Router from 'next/router'
 import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
@@ -16,7 +16,6 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { ISignInFormValue } from '../../types'
 
 export default function SignIn() {
-  const router = useRouter()
   const dispatch = useAppDispatch()
   const { loginState } = useAppSelector(userSelector)
   const currentUser = useAppSelector(currentUserSelector)
@@ -40,7 +39,7 @@ export default function SignIn() {
 
   const onSignedIn = () => {
     if (currentUser !== null) {
-      router.push('/')
+      Router.push('/')
     }
   }
 
