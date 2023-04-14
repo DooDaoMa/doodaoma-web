@@ -1,6 +1,7 @@
 export { APODSection } from './organisms/APODSection'
 export { Button } from './atoms/Button'
 export { ChangeThemeButton } from './molecules/ChangeThemeButton'
+export { ForecastCard } from './molecules/ForecastCard'
 export { ForecastSection } from './organisms/ForecastSection'
 export { Input } from './atoms/Input'
 export { Layout } from './organisms/Layout'
