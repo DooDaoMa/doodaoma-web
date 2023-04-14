@@ -11,7 +11,6 @@ type Props = {
 export const RouteGuard = ({ children }: Props) => {
   const currentUser = useAppSelector(currentUserSelector)
   const { restoreUserState } = useAppSelector(userSelector)
-  console.log(currentUser, restoreUserState)
 
   useEffect(() => {
     if (
@@ -20,7 +19,6 @@ export const RouteGuard = ({ children }: Props) => {
     ) {
       return
     }
-    console.log('push')
     if (currentUser === null) {
       Router.push('/signin')
     }
