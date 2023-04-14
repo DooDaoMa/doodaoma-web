@@ -12,29 +12,32 @@
     @apply bg-white dark:bg-gray-900;
   }
   nav {
-    @apply top-0 min-h-[73px] 
-      border-b border-white bg-white 
-      px-4 py-4 z-20
+    @apply top-0 z-20 
+      min-h-[73px] border-b border-white 
+      bg-white px-4 py-4
       shadow-md dark:border-transparent
       dark:bg-gray-900 dark:shadow-2xl
       sm:sticky sm:flex sm:items-center sm:px-12;
   }
   section {
-    @apply rounded-md
-      border border-gray-200
-      bg-white px-6
-      py-4 h-fit shadow-sm
-      dark:border-transparent dark:bg-slate-800;
+    @apply h-fit
+      rounded-md 
+      bg-gray-50
+      px-6 py-4 shadow-lg
+      dark:bg-slate-800;
+  }
+  p {
+    @apply text-slate-900 dark:text-slate-200;
   }
   label {
     @apply mb-1 block
       text-sm font-medium
       text-gray-700 dark:text-white;
   }
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="number"],
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  input[type='number'],
   textarea,
   select {
     @apply block w-full rounded-md
@@ -45,7 +48,7 @@
   a {
     @apply font-medium text-blue-500 dark:text-blue-500;
   }
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     @apply bg-white pt-0.5;
   }
   input:-webkit-autofill,

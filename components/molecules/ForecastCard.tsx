@@ -12,7 +12,7 @@ export const ForecastCard = ({ data }: ForecastCardProps) => {
     <>
       <div
         key={data.id}
-        className="mb-2 box-content min-w-[125px] rounded-md bg-slate-700 px-2 py-3">
+        className="mb-2 box-content min-w-[125px] rounded-md bg-white px-2 py-3 shadow-md dark:bg-slate-700">
         <div>
           <p className="text-center font-semibold">{data.main}&nbsp;</p>
           <p className="text-center font-light italic">{data?.description}</p>
