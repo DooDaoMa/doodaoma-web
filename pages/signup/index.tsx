@@ -66,7 +66,7 @@ export default function SignUp() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Section className="mx-auto flex max-w-4xl flex-col gap-y-8 md:flex-row md:gap-x-8">
+      <Section className="container mx-auto flex max-w-4xl flex-col gap-y-8 md:flex-row md:gap-x-8">
         <>
           <div className="hidden grow-[2] md:block">
             <Image src="/people.svg" height={400} width={600} alt="people" />
