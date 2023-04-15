@@ -5,6 +5,7 @@ import {
   parseJSON,
   isSameHour,
   isEqual,
+  isPast,
 } from 'date-fns'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
@@ -133,13 +134,22 @@ export default function ReservationPage() {
                 const reserved = reservedList?.find((timeSlot) =>
                   isSameHour(timeSlot, dateTime),
                 )
+                const isTs = timeSlotList?.find((timeSlot) =>
+                  isSameHour(parseJSON(timeSlot.startTime), dateTime),
+                )
+                console.log(isTs)
                 return (
                   <>
                     <button
                       className={`border-grey-400 curser-pointer w-full rounded-sm border px-2 py-3 delay-100 duration-150 ease-in-out disabled:bg-slate-200 ${
                         selected ? 'border-transparent bg-blue-300' : ''
+                      } ${reserved ? 'disabled:bg-red-300' : ''} ${
+                        !isTs ? 'disabled:bg-slate-600' : ''
+                      }
                       }`}
-                      disabled={!!reserved}></button>
+                      disabled={
+                        !!reserved || isPast(dateTime) || !isTs
+                      }></button>
                   </>
                 )
               }}
