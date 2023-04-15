@@ -1,3 +1,5 @@
+import crypto from 'crypto'
+
 import {
   addMinutes,
   fromUnixTime,
@@ -42,11 +44,12 @@ export const groupDate = (dateList: any[]) => {
     if (!acc[date]) {
       acc[date] = []
     }
+    const uuid = crypto.randomBytes(16).toString('hex')
     acc[date].push({
       main: curr.weather[0].main,
       description: curr.weather[0].description,
       icon: curr.weather[0].icon,
-      id: curr.weather[0].id,
+      id: uuid,
       time: fromUnixTime(curr.dt),
     })
     return acc

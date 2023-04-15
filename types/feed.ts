@@ -22,7 +22,7 @@ export type WeatherData = {
   main: string
   description: string
   icon: string
-  id: number
+  id: string
   time: Date
 }
 

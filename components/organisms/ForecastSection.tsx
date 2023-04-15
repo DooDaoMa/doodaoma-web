@@ -10,9 +10,11 @@ type WeatherSectionProps = {
 
 export const ForecastSection = ({ content }: WeatherSectionProps) => {
   return (
-    <Section className="col-span-2 lg:col-start-4 lg:row-span-3 lg:row-start-1">
+    <Section className="col-span-2 max-h-[800px] overflow-y-scroll pt-0 lg:col-span-3">
       <>
-        <div className="feed-card-header">Forecast</div>
+        <div className="feed-card-header sticky top-0 mb-0 bg-gray-50 pb-3 pt-4 dark:bg-slate-800">
+          Forecast
+        </div>
         <div className="flex flex-col flex-nowrap gap-4 overflow-hidden">
           {content?.weatherList ? (
             <>
@@ -22,7 +24,7 @@ export const ForecastSection = ({ content }: WeatherSectionProps) => {
                     <div className="mb-2 font-semibold">{key}</div>
                     <div className="flex flex-nowrap gap-4 overflow-scroll ">
                       {value.map((ele) => (
-                        <ForecastCard key={key} data={ele} />
+                        <ForecastCard key={ele.id} data={ele} />
                       ))}
                     </div>
                   </div>

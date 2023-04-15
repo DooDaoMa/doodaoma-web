@@ -122,13 +122,10 @@ export const feedReducer = createReducer(initialState, (builder) => {
     })
     .addCase(fetchForecast.fulfilled, (state, { payload }) => {
       state.loadForecastState.status = 'success'
-
-      const group = groupDate(payload.list)
-      console.log('group', group)
       state.forecastData = {
         sunset: fromUnixTime(payload.city.sunset),
         sunrise: fromUnixTime(payload.city.sunrise),
-        weatherList: group,
+        weatherList: groupDate(payload.list),
       }
     })
     .addCase(fetchForecast.rejected, (state, { payload }) => {
