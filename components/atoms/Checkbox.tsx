@@ -1,8 +1,8 @@
-import { forwardRef } from 'react'
+import { forwardRef, InputHTMLAttributes } from 'react'
 
 type CheckboxProps = {
   label?: string
-}
+} & InputHTMLAttributes<HTMLInputElement>
 
 /* eslint-disable react/display-name */
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(

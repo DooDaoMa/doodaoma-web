@@ -1,8 +1,3 @@
-export interface FilterWheelOption {
-  position: number
-  name: string
-}
-
 export interface IImagingForm {
   startSequence: {
     cooling: {
@@ -15,14 +10,14 @@ export interface IImagingForm {
       name: string
       rotation: number
       ra: {
-        hours: number
-        minutes: number
-        seconds: number
+        hours: string
+        minutes: string
+        seconds: string
       }
       dec: {
-        degrees: number
-        minutes: number
-        seconds: number
+        degrees: string
+        minutes: string
+        seconds: string
       }
     }
     tracking: {
@@ -31,7 +26,7 @@ export interface IImagingForm {
     guiding: {
       forceCalibration: boolean
     }
-    exposures: {
+    exposure: {
       gain: number
       time: number
       binning: string
@@ -45,44 +40,14 @@ export interface IImagingForm {
   }
 }
 
-export const imagingFormDefaultValue: IImagingForm = {
-  startSequence: {
-    cooling: {
-      temperature: -10,
-      duration: 5,
-    },
-  },
-  imagingSequence: {
-    target: {
-      name: '',
-      rotation: 0,
-      ra: {
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-      },
-      dec: {
-        degrees: 0,
-        minutes: 0,
-        seconds: 0,
-      },
-    },
-    tracking: {
-      mode: 0,
-    },
-    guiding: {
-      forceCalibration: false,
-    },
-    exposures: {
-      gain: 100,
-      time: 300,
-      binning: '1x1',
-      imageType: 'LIGHT',
-    },
-  },
-  endSequence: {
-    warming: {
-      duration: 5,
-    },
-  },
-}
+export type ImagingStatus =
+  | 'busy'
+  | 'cancelling'
+  | 'connecting'
+  | 'not connect'
+  | 'ready'
+  | 'empty'
+  | 'reconnecting'
+
+export const blackPlaceholderUrl =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='

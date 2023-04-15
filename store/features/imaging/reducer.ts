@@ -1,18 +1,19 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { FilterWheelOption } from '../../../types/imaging'
+import { ImagingStatus } from '../../../types/imaging'
+
+import { setImagingStatus } from './actions'
 
 interface InitialStateProps {
-  filterWheelOptions: FilterWheelOption[]
+  imagingStatus: ImagingStatus
 }
 
 const initialState: InitialStateProps = {
-  filterWheelOptions: [],
+  imagingStatus: 'empty',
 }
 
-export const galleryReducer = createReducer(initialState, (builder) => {
-  builder
-  // .addCase(setFilterWheelOptions, (state, { payload }) => {
-  //   state.filterWheelOptions = payload
-  // })
+export const imagingReducer = createReducer(initialState, (builder) => {
+  builder.addCase(setImagingStatus, (state, { payload }) => {
+    state.imagingStatus = payload
+  })
 })

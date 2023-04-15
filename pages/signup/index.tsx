@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import Router from 'next/router'
 import { useEffect } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { toast } from 'react-toastify'
@@ -19,7 +19,6 @@ export default function SignUp() {
   const dispatch = useAppDispatch()
   const { signUpState } = useAppSelector(userSelector)
   const currentUser = useAppSelector(currentUserSelector)
-  const router = useRouter()
   const { register, handleSubmit } = useForm<ISignUpFormValue>({
     defaultValues: {
       username: '',
@@ -44,7 +43,7 @@ export default function SignUp() {
   const onPerformSignUp = () => {
     if (signUpState.status === 'success') {
       toast.success('Sign Up success')
-      router.push('/signin')
+      Router.push('/signin')
     } else if (signUpState.status === 'error') {
       toast.error('Sign up fail')
     }
@@ -52,7 +51,7 @@ export default function SignUp() {
 
   const onSignedIn = () => {
     if (currentUser !== null) {
-      router.push('/')
+      Router.push('/')
     }
   }
 

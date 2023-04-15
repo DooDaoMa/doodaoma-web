@@ -1,9 +1,9 @@
-import { forwardRef, ReactNode } from 'react'
+import { forwardRef, ReactNode, SelectHTMLAttributes } from 'react'
 
 type SelectProps = {
   label?: string
   children?: ReactNode
-}
+} & SelectHTMLAttributes<HTMLSelectElement>
 
 /* eslint-disable react/display-name */
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
