@@ -14,7 +14,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           type="text"
           id={label}
           name={label}
-          className="block w-full rounded rounded-md border border-gray-300 px-3 py-1 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className="block w-full rounded-md border border-gray-300 px-3 py-1 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           ref={ref}
           {...rest}
         />

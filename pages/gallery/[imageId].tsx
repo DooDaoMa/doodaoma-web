@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
-import { Button } from '../../components'
+import { Button, Loading } from '../../components'
 import { fetchImageById, removeImageById } from '../../store/features/gallery'
 import { useAppDispatch } from '../../store/hooks'
 import { IImage } from '../../types/gallery'
@@ -34,7 +34,7 @@ export default function ImageDetail() {
 
   return (
     <>
-      {imageDetail !== undefined && (
+      {imageDetail !== undefined ? (
         <div>
           <h1 className="mb-2 text-3xl font-bold">{imageDetail.name}</h1>
           <p className="mb-2">Created at {imageDetail.createdAt}</p>
@@ -54,7 +54,11 @@ export default function ImageDetail() {
             className="rounded-2xl"
           />
         </div>
+      ) : (
+        <Loading />
       )}
     </>
   )
 }
+
+ImageDetail.requireAuth = true

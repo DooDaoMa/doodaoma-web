@@ -7,6 +7,19 @@ import { Input } from '../atoms/Input'
 import { Select } from '../atoms/Select'
 
 type Props = {
+  initialFormValue: {
+    name: string
+    ra: {
+      hours: string
+      minutes: string
+      seconds: string
+    }
+    dec: {
+      degrees: string
+      minutes: string
+      seconds: string
+    }
+  }
   isBusy: boolean
   isCancelling: boolean
   isSubmitButtonDisabled: boolean
@@ -57,6 +70,7 @@ const imagingFormDefaultValue: IImagingForm = {
 }
 
 export const ImagingForm = ({
+  initialFormValue,
   isBusy,
   isCancelling,
   isSubmitButtonDisabled,
@@ -64,7 +78,15 @@ export const ImagingForm = ({
   onCancel,
 }: Props) => {
   const { register, handleSubmit } = useForm<IImagingForm>({
-    defaultValues: imagingFormDefaultValue,
+    defaultValues: {
+      ...imagingFormDefaultValue,
+      imagingSequence: {
+        target: {
+          ...imagingFormDefaultValue.imagingSequence.target,
+          ...initialFormValue,
+        },
+      },
+    },
   })
 
   return (

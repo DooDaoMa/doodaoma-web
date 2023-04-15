@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
-import { Button } from '../../components'
+import { Button, Loading } from '../../components'
 import { fetchMyImages, gallerySelector } from '../../store/features/gallery'
 import { currentUserSelector } from '../../store/features/user'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
@@ -21,7 +21,7 @@ export default function Gallery() {
       return
     }
     dispatch(fetchMyImages(undefined))
-  }, [currentUser, images, dispatch])
+  }, [currentUser, dispatch])
 
   useEffect(() => {
     if (fetchMyImagesState.error) {
@@ -44,7 +44,7 @@ export default function Gallery() {
         </Button>
       </div>
       <div className="grid grid-cols-5 gap-12">
-        {images.length > 0 &&
+        {images.length > 0 ? (
           images.map((image) => (
             <div
               className="relative h-[120px] 
@@ -65,7 +65,10 @@ export default function Gallery() {
                 33vw"
               />
             </div>
-          ))}
+          ))
+        ) : (
+          <Loading />
+        )}
       </div>
     </>
   )

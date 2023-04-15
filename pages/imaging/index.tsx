@@ -1,37 +1,64 @@
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef } from 'react'
 import { toast } from 'react-toastify'
 import { ReadyState } from 'react-use-websocket'
 import { JsonValue } from 'react-use-websocket/dist/lib/types'
 import { useWebSocket } from 'react-use-websocket/dist/lib/use-websocket'
 
-import { Section } from '../../components'
+import { Loading, Section } from '../../components'
 import { ImagingForm } from '../../components/molecules/ImagingForm'
 import { selectImaging, setImagingStatus } from '../../store/features/imaging'
 import { userSelector } from '../../store/features/user'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { IImagingForm, ImagingStatus } from '../../types/imaging'
 import { Message } from '../../types/message'
+import { degreesToDMS, timeDecimalToHMS } from '../../utils/dateTime'
 
 export default function Imaging() {
+  const { query } = useRouter()
   const { currentUser } = useAppSelector(userSelector)
+  const ra = (query.ra || '') as string
+  const dec = (query.dec || '') as string
+  const name = (query.name || '') as string
 
   return (
     <>
       {currentUser !== null ? (
-        <ImagingWebSocket userId={currentUser.id} />
+        <ImagingWebSocket
+          userId={currentUser.id}
+          ra={ra}
+          dec={dec}
+          name={name}
+        />
       ) : (
-        'No current session'
+        <Loading />
       )}
     </>
   )
 }
 
-function ImagingWebSocket({ userId }: { userId: string }) {
+function ImagingWebSocket({
+  userId,
+  ra,
+  dec,
+  name,
+}: {
+  userId: string
+  ra: string
+  dec: string
+  name: string
+}) {
   const dispatch = useAppDispatch()
   const { imagingStatus } = useAppSelector(selectImaging)
   const previousStateRef = useRef<ImagingStatus>()
   const isConnectedFirstTime = useRef(true)
+
+  const computedRaDec = useMemo(() => {
+    const convertedRa = timeDecimalToHMS(ra)
+    const convertedDec = degreesToDMS(dec)
+    return { ra: convertedRa, dec: convertedDec }
+  }, [ra, dec])
 
   const { lastJsonMessage, readyState, sendJsonMessage } = useWebSocket(
     `${process.env.NEXT_PUBLIC_WEB_SOCKET_URL}/web`,
@@ -167,6 +194,10 @@ function ImagingWebSocket({ userId }: { userId: string }) {
       </div>
       <Section>
         <ImagingForm
+          initialFormValue={{
+            name,
+            ...computedRaDec,
+          }}
           isBusy={imagingStatus === 'busy'}
           isSubmitButtonDisabled={
             imagingStatus === 'busy' || imagingStatus !== 'ready'
