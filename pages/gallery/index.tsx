@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
@@ -10,15 +11,13 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { blackPlaceholderUrl } from '../../types/imaging'
 
 export default function Gallery() {
+  const { push } = useRouter()
   const dispatch = useAppDispatch()
   const currentUser = useAppSelector(currentUserSelector)
   const { images, fetchMyImagesState } = useAppSelector(gallerySelector)
 
   useEffect(() => {
     if (currentUser === null) {
-      return
-    }
-    if (images.length > 0) {
       return
     }
     dispatch(fetchMyImages(undefined))
@@ -40,9 +39,7 @@ export default function Gallery() {
       </Head>
       <div className="mb-6 flex justify-between">
         <h1 className="text-3xl font-bold">Your Gallery</h1>
-        <Button
-          type="button"
-          onClick={() => dispatch(fetchMyImages(undefined))}>
+        <Button type="button" onClick={() => dispatch(fetchMyImages)}>
           Refresh
         </Button>
       </div>
@@ -50,8 +47,12 @@ export default function Gallery() {
         {images.length > 0 &&
           images.map((image) => (
             <div
-              className="relative h-[120px] overflow-hidden rounded-md md:h-[160px] lg:h-[240px]"
-              key={image.id}>
+              className="relative h-[120px] 
+              cursor-pointer overflow-hidden rounded-md 
+              transition-transform hover:scale-105 
+              md:h-[160px] lg:h-[240px]"
+              key={image.id}
+              onClick={() => push(`/gallery/${image.id}`)}>
               <Image
                 className="object-cover"
                 src={image.imageUrl}

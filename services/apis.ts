@@ -19,6 +19,7 @@ export const addUser = (newUser: SignUpProps) =>
   axiosAccountAPI.post('/signup', newUser)
 
 export const fetchAccountImages = () => axiosContentAPI.get('/account/images')
+
 export const loadCurrentUser = () => axiosAccountAPI.get('/api/account')
 
 export const loadTimeSlot = (filter: AvailableReservationQueryParams) => {
@@ -149,3 +150,8 @@ export const loadDSO = (filter: DSOQueryParams) => {
   )
   return axios.get(`https://www.datastro.eu/api/records/1.0/search/${query}`)
 }
+export const getImageById = (imageId: string) =>
+  axiosContentAPI.get(`/images/${imageId}`)
+
+export const deleteImageById = (imageId: string) =>
+  axiosContentAPI.delete(`/images/${imageId}`)

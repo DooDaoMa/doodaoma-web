@@ -1,8 +1,3 @@
-export interface FilterWheelOption {
-  position: number
-  name: string
-}
-
 export interface IImagingForm {
   startSequence: {
     cooling: {
@@ -52,6 +47,7 @@ export type ImagingStatus =
   | 'not connect'
   | 'ready'
   | 'empty'
+  | 'reconnecting'
 
 export const blackPlaceholderUrl =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='

@@ -155,6 +155,8 @@ export const userReducer = createReducer(initialState, (builder) => {
     .addCase(resetCurrentUser, (state) => {
       state.token = ''
       state.currentUser = null
+      state.restoreUserState.error = null
+      state.restoreUserState.status = 'idle'
       localStorage.removeItem('token')
       delete axiosAccountAPI.defaults.headers.common.Authorization
       delete axiosContentAPI.defaults.headers.common.Authorization

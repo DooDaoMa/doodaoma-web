@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { toast } from 'react-toastify'
 import { ReadyState } from 'react-use-websocket'
 import { JsonValue } from 'react-use-websocket/dist/lib/types'
@@ -10,7 +10,7 @@ import { ImagingForm } from '../../components/molecules/ImagingForm'
 import { selectImaging, setImagingStatus } from '../../store/features/imaging'
 import { userSelector } from '../../store/features/user'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { IImagingForm } from '../../types/imaging'
+import { IImagingForm, ImagingStatus } from '../../types/imaging'
 import { Message } from '../../types/message'
 
 export default function Imaging() {
@@ -21,7 +21,7 @@ export default function Imaging() {
       {currentUser !== null ? (
         <ImagingWebSocket userId={currentUser.id} />
       ) : (
-        'Connecting'
+        'No current session'
       )}
     </>
   )
@@ -30,6 +30,8 @@ export default function Imaging() {
 function ImagingWebSocket({ userId }: { userId: string }) {
   const dispatch = useAppDispatch()
   const { imagingStatus } = useAppSelector(selectImaging)
+  const previousStateRef = useRef<ImagingStatus>()
+  const isConnectedFirstTime = useRef(true)
 
   const { lastJsonMessage, readyState, sendJsonMessage } = useWebSocket(
     `${process.env.NEXT_PUBLIC_WEB_SOCKET_URL}/web`,
@@ -46,21 +48,30 @@ function ImagingWebSocket({ userId }: { userId: string }) {
       },
       onOpen: () => {
         console.info('Connected to WebSocket successfully')
-        toast.success('Connection established')
+        if (isConnectedFirstTime.current) {
+          toast.success('Connection established')
+          isConnectedFirstTime.current = false
+        } else {
+          toast.success('Reconnected successfully')
+        }
         sendJsonMessage({ type: 'getFilterWheelOptions' })
         sendJsonMessage({ type: 'getIsBusy' })
       },
       onClose: (event) => {
         console.info(event)
         if ([3000].includes(event.code)) {
-          toast.error('Connection closed. Retry connecting...')
+          toast.error('Connection lost. Retry connecting...')
         }
       },
       shouldReconnect: (event) => {
-        return [3000].includes(event.code)
+        const shouldReconnect = [3000].includes(event.code)
+        if (shouldReconnect) {
+          dispatch(setImagingStatus('reconnecting'))
+        }
+        return shouldReconnect
       },
-      onReconnectStop: (attempt) => {
-        console.info(attempt)
+      onReconnectStop: () => {
+        dispatch(setImagingStatus('not connect'))
       },
     },
   )
@@ -79,7 +90,12 @@ function ImagingWebSocket({ userId }: { userId: string }) {
       }
       case 'updateIsBusy': {
         const isBusy = message.payload.isBusy
-        dispatch(setImagingStatus(isBusy ? 'busy' : 'ready'))
+        const newStatus = isBusy ? 'busy' : 'ready'
+        dispatch(setImagingStatus(newStatus))
+        if (previousStateRef.current === 'busy' && newStatus === 'ready') {
+          toast.warning('Exposuring cancelled')
+        }
+        previousStateRef.current = newStatus
         break
       }
     }
@@ -120,6 +136,8 @@ function ImagingWebSocket({ userId }: { userId: string }) {
         return { text: 'Empty', color: 'bg-zinc-500' }
       case 'not connect':
         return { text: 'Not connect', color: 'bg-red-500' }
+      case 'reconnecting':
+        return { text: 'Retrying connect', color: 'bg-blue-500' }
       case 'connecting':
         return { text: 'Connecting', color: 'bg-yellow-500' }
       case 'ready':

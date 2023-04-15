@@ -1,12 +1,12 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { ErrorTypes } from '../../../types'
-import { ImageProps } from '../../../types/gallery'
+import { IImage } from '../../../types/gallery'
 
-import { fetchMyImages } from './actions'
+import { fetchMyImages, removeImageById } from './actions'
 
 interface InitialStateProps {
-  images: ImageProps[]
+  images: IImage[]
   fetchMyImagesState: {
     isLoading: boolean
     error: ErrorTypes | null
@@ -35,5 +35,9 @@ export const galleryReducer = createReducer(initialState, (builder) => {
     .addCase(fetchMyImages.rejected, (state, { payload }) => {
       state.fetchMyImagesState.isLoading = false
       state.fetchMyImagesState.error = payload as ErrorTypes
+    })
+    .addCase(removeImageById.fulfilled, (state, { meta }) => {
+      const deletedImageId = meta.arg
+      state.images = state.images.filter((image) => image.id !== deletedImageId)
     })
 })
