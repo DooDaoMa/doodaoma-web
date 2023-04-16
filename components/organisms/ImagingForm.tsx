@@ -1,25 +1,15 @@
+import { useRouter } from 'next/router'
+import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { IImagingForm } from '../../types/imaging'
+import { degreesToDMS, timeDecimalToHMS } from '../../utils/dateTime'
 import { Button } from '../atoms/Button'
 import { Checkbox } from '../atoms/Checkbox'
 import { Input } from '../atoms/Input'
 import { Select } from '../atoms/Select'
 
 type Props = {
-  initialFormValue: {
-    name: string
-    ra: {
-      hours: string
-      minutes: string
-      seconds: string
-    }
-    dec: {
-      degrees: string
-      minutes: string
-      seconds: string
-    }
-  }
   isBusy: boolean
   isCancelling: boolean
   isSubmitButtonDisabled: boolean
@@ -70,17 +60,28 @@ const imagingFormDefaultValue: IImagingForm = {
 }
 
 export const ImagingForm = ({
-  initialFormValue,
   isBusy,
   isCancelling,
   isSubmitButtonDisabled,
   onSubmit,
   onCancel,
 }: Props) => {
+  const { query } = useRouter()
+
+  const initialFormValue = useMemo(() => {
+    const ra = (query.ra || '') as string
+    const dec = (query.dec || '') as string
+    const name = (query.name || '') as string
+    const convertedRa = timeDecimalToHMS(ra)
+    const convertedDec = degreesToDMS(dec)
+    return { ra: convertedRa, dec: convertedDec, name }
+  }, [query])
+
   const { register, handleSubmit } = useForm<IImagingForm>({
     defaultValues: {
       ...imagingFormDefaultValue,
       imagingSequence: {
+        ...imagingFormDefaultValue.imagingSequence,
         target: {
           ...imagingFormDefaultValue.imagingSequence.target,
           ...initialFormValue,
