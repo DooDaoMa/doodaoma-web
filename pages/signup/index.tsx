@@ -1,35 +1,48 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import Router from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import * as yup from 'yup'
 
 import { Button, Input, Section } from '../../components'
+import { Checkbox } from '../../components/atoms/Checkbox'
 import {
   createUser,
   currentUserSelector,
   userSelector,
 } from '../../store/features/user'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { ISignUpFormValue } from '../../types'
+
+const schema = yup.object({
+  username: yup.string().required(),
+  email: yup.string().email(),
+  password: yup.string().required('Password is required'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Password must match'),
+})
+
+type FormData = yup.InferType<typeof schema>
 
 export default function SignUp() {
   const dispatch = useAppDispatch()
   const { signUpState } = useAppSelector(userSelector)
+  const [isShowPassword, setIsShowPassword] = useState<boolean>(false)
   const currentUser = useAppSelector(currentUserSelector)
-  const { register, handleSubmit } = useForm<ISignUpFormValue>({
-    defaultValues: {
-      username: '',
-      email: '',
-      password: '',
-      'confirm password': '',
-    },
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
   })
 
-  const onSignUp: SubmitHandler<ISignUpFormValue> = (data) => {
-    if (data.password === data['confirm password']) {
+  const onSignUp: SubmitHandler<FormData> = (data) => {
+    if (data.password === data['confirmPassword']) {
       dispatch(
         createUser({
           username: data.username,
@@ -66,7 +79,7 @@ export default function SignUp() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Section className="container mx-auto flex max-w-4xl flex-col gap-y-8 md:flex-row md:gap-x-8">
+      <Section className="container mx-auto flex flex-col gap-y-8 md:flex-row md:gap-x-8">
         <>
           <div className="hidden grow-[2] md:block">
             <Image src="/people.svg" height={400} width={600} alt="people" />
@@ -80,13 +93,18 @@ export default function SignUp() {
               <Input label="email" type="email" {...register('email')} />
               <Input
                 label="password"
-                type="password"
+                type={isShowPassword ? 'text' : 'password'}
                 {...register('password')}
               />
               <Input
                 label="confirm password"
-                type="password"
-                {...register('confirm password')}
+                type={isShowPassword ? 'text' : 'password'}
+                errorMessage={errors?.confirmPassword?.message}
+                {...register('confirmPassword')}
+              />
+              <Checkbox
+                label="show password"
+                onChange={() => setIsShowPassword((prev) => !prev)}
               />
               <Button type="submit">submit</Button>
             </form>

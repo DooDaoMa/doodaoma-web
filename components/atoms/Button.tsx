@@ -30,10 +30,7 @@ export const Button = (props: ButtonProps) => {
     }
   }
   return (
-    <button
-      type={type}
-      className={`transition-button block w-fit rounded-md border px-4 py-2 font-bold uppercase sm:text-sm ${getStyle()} disabled:cursor-not-allowed disabled:bg-slate-300 ${className}`}
-      {...rest}>
+    <button type={type} className={`${getStyle()} ${className}`} {...rest}>
       {children}
     </button>
   )

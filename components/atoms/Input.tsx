@@ -2,11 +2,12 @@ import { forwardRef, InputHTMLAttributes } from 'react'
 
 type InputProps = {
   label?: string
+  errorMessage?: string
 } & InputHTMLAttributes<HTMLInputElement>
 
 /* eslint-disable react/display-name */
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, ...rest }, ref) => {
+  ({ label, errorMessage, ...rest }, ref) => {
     return (
       <div>
         <label htmlFor={label}>{label}</label>
@@ -14,10 +15,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           type="text"
           id={label}
           name={label}
-          className="block w-full rounded-md border border-gray-300 px-3 py-1 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className={`${errorMessage ? 'error-input' : ''}`}
           ref={ref}
           {...rest}
         />
+        {errorMessage ? (
+          <p className="mt-2 text-red-500 dark:text-red-500">{errorMessage}</p>
+        ) : null}
       </div>
     )
   },

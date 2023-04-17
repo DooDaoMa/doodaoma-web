@@ -94,4 +94,7 @@
   .feed-card-header {
     @apply mb-3 text-lg font-bold text-slate-900 dark:text-white;
   }
+  .error-input {
+    @apply !border-red-500 !text-red-500
+  }
 }
