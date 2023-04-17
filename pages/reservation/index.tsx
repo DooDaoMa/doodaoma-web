@@ -124,7 +124,7 @@ export default function ReservationPage() {
             <ScheduleSelector
               selection={schedule}
               minTime={18}
-              maxTime={31}
+              maxTime={30}
               selectionScheme="linear"
               onChange={handleChange}
               columnGap="1.25rem"
@@ -137,7 +137,6 @@ export default function ReservationPage() {
                 const isTs = timeSlotList?.find((timeSlot) =>
                   isSameHour(parseJSON(timeSlot.startTime), dateTime),
                 )
-                console.log(isTs)
                 return (
                   <>
                     <button
