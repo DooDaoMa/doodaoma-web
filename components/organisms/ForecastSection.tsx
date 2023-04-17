@@ -10,7 +10,7 @@ type WeatherSectionProps = {
 
 export const ForecastSection = ({ content }: WeatherSectionProps) => {
   return (
-    <Section className="col-span-2 max-h-[800px] overflow-y-scroll pt-0 lg:col-span-3">
+    <Section className="col-span-2 max-h-[800px] overflow-y-scroll pt-0 lg:col-start-4 lg:row-span-2 lg:row-start-1">
       <>
         <div className="feed-card-header sticky top-0 mb-0 bg-gray-50 pb-3 pt-4 dark:bg-slate-800">
           Forecast

@@ -6,7 +6,7 @@ import {
   MoonPhaseSection,
   WeatherSection,
   UpcomingSection,
-  TelescopeSection,
+  // TelescopeSection,
   TargetSection,
   ForecastSection,
 } from '../components'
@@ -41,10 +41,10 @@ export default function Home() {
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:grid-cols-5">
         <UpcomingSection />
         <WeatherSection weather={weatherData} content={forecastData} />
-        <div className="row-span-3 flex flex-col gap-y-8">
-          <MoonPhaseSection content={moonPhase} />
-          <TelescopeSection />
-        </div>
+        {/* <div className="row-span-3 flex flex-col gap-y-8"> */}
+        <MoonPhaseSection content={moonPhase} />
+        {/* <TelescopeSection /> */}
+        {/* </div> */}
         <APODSection content={apod} />
         <TargetSection />
         <ForecastSection content={forecastData} />
