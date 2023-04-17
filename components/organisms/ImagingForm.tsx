@@ -10,8 +10,8 @@ import { Input } from '../atoms/Input'
 import { Select } from '../atoms/Select'
 
 type Props = {
-  isBusy: boolean
   isCancelling: boolean
+  isCancelButtonShown: boolean
   isSubmitButtonDisabled: boolean
   onSubmit: (value: IImagingForm) => void
   onCancel: () => void
@@ -60,7 +60,7 @@ const imagingFormDefaultValue: IImagingForm = {
 }
 
 export const ImagingForm = ({
-  isBusy,
+  isCancelButtonShown,
   isCancelling,
   isSubmitButtonDisabled,
   onSubmit,
@@ -68,7 +68,7 @@ export const ImagingForm = ({
 }: Props) => {
   const { query } = useRouter()
 
-  const initialFormValue = useMemo(() => {
+  const computedInitialFormValue = useMemo(() => {
     const ra = (query.ra || '') as string
     const dec = (query.dec || '') as string
     const name = (query.name || '') as string
@@ -84,7 +84,7 @@ export const ImagingForm = ({
         ...imagingFormDefaultValue.imagingSequence,
         target: {
           ...imagingFormDefaultValue.imagingSequence.target,
-          ...initialFormValue,
+          ...computedInitialFormValue,
         },
       },
     },
@@ -225,7 +225,7 @@ export const ImagingForm = ({
         <Button disabled={isSubmitButtonDisabled} type="submit">
           Acquire images
         </Button>
-        {isBusy && (
+        {isCancelButtonShown && (
           <Button disabled={isCancelling} btnStyle="danger" onClick={onCancel}>
             Cancel
           </Button>
