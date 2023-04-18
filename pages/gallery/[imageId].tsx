@@ -1,3 +1,5 @@
+import { format, parseJSON } from 'date-fns'
+import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -7,6 +9,7 @@ import { Button, Loading } from '../../components'
 import { fetchImageById, removeImageById } from '../../store/features/gallery'
 import { useAppDispatch } from '../../store/hooks'
 import { IImage } from '../../types/gallery'
+import { blackPlaceholderUrl } from '../../types/imaging'
 
 export default function ImageDetail() {
   const { query, push } = useRouter()
@@ -34,10 +37,18 @@ export default function ImageDetail() {
 
   return (
     <>
+      <Head>
+        <title>View Image</title>
+      </Head>
       {imageDetail !== undefined ? (
         <div>
-          <h1 className="mb-2 text-3xl font-bold">{imageDetail.name}</h1>
-          <p className="mb-2">Created at {imageDetail.createdAt}</p>
+          <h1 className="mb-2 text-3xl font-bold">
+            {imageDetail.displayName || imageDetail.name}
+          </h1>
+          <p className="mb-2 italic">
+            Created at{' '}
+            {format(parseJSON(imageDetail.createdAt), 'dd E HH:mm aa')}
+          </p>
           <div className="mb-6 flex gap-2">
             <a href={imageDetail.imageUrl} download>
               <Button btnStyle="secondary">Download</Button>
@@ -51,6 +62,8 @@ export default function ImageDetail() {
             alt={`${imageDetail.name} gallery image`}
             width={800}
             height={600}
+            placeholder="blur"
+            blurDataURL={blackPlaceholderUrl}
             className="rounded-2xl"
           />
         </div>

@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
@@ -22,6 +22,7 @@ export const useRestoreUser = () => {
     if (restoreUserState.status === 'error') {
       toast.error('Restore user failed. Please sign in again')
       dispatch(resetCurrentUser())
+      Router.push('/signin')
     }
   }, [restoreUserState, pathname, dispatch])
 

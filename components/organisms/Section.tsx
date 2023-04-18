@@ -8,7 +8,7 @@ type SectionProps = {
 export const Section = (props: SectionProps) => {
   const { children, className, ...rest } = props
   return (
-    <section className={`${className}`} {...rest}>
+    <section className={className} {...rest}>
       {children}
     </section>
   )

@@ -76,15 +76,15 @@ export default function SignUp() {
             <form
               onSubmit={handleSubmit(onSignUp)}
               className="flex flex-col gap-y-3">
-              <Input label="username" {...register('username')} />
-              <Input label="email" type="email" {...register('email')} />
+              <Input label="Username" {...register('username')} />
+              <Input label="Email" type="email" {...register('email')} />
               <Input
-                label="password"
+                label="Password"
                 type="password"
                 {...register('password')}
               />
               <Input
-                label="confirm password"
+                label="Confirm password"
                 type="password"
                 {...register('confirm password')}
               />

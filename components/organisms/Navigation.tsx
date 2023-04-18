@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
 import { BsCalendarEvent } from 'react-icons/bs'
 import { FaHome, FaBars } from 'react-icons/fa'
 import { FiLogIn } from 'react-icons/fi'
@@ -14,38 +13,20 @@ import { ChangeThemeButton } from '../molecules/ChangeThemeButton'
 import { MenuItem } from '../molecules/MenuItem'
 
 export const Navigation = () => {
-  const router = useRouter()
+  const { push } = useRouter()
   const currentUser = useSelector(currentUserSelector)
-  const [selected, setSelected] = useState<string>(router.pathname || '')
-
-  useEffect(() => {
-    setSelected(router.pathname)
-  }, [router.pathname])
   return (
     <nav>
       <div className="hidden h-full sm:relative sm:grid sm:w-full sm:grid-cols-3 sm:items-center">
         <div />
         <div className="flex h-full items-center justify-center gap-x-12">
-          <MenuItem
-            icon={<FaHome className="h-5 w-5" />}
-            to="/"
-            isSelected={selected === '/'}
-          />
-          <MenuItem
-            icon={<IoTelescope className="h-5 w-5" />}
-            to="/imaging"
-            isSelected={selected === '/imaging'}
-          />
+          <MenuItem icon={<FaHome className="h-5 w-5" />} to="/" />
+          <MenuItem icon={<IoTelescope className="h-5 w-5" />} to="/imaging" />
           <MenuItem
             icon={<BsCalendarEvent className="h-5 w-5" />}
             to="/reservation"
-            isSelected={selected === '/reservation'}
           />
-          <MenuItem
-            icon={<IoMdImages className="h-5 w-5" />}
-            to="/gallery"
-            isSelected={selected === '/gallery'}
-          />
+          <MenuItem icon={<IoMdImages className="h-5 w-5" />} to="/gallery" />
         </div>
         <div className="flex items-center justify-end gap-x-6">
           <ChangeThemeButton />
@@ -63,10 +44,10 @@ export const Navigation = () => {
                   className="flex cursor-pointer items-center
                 gap-x-1 text-slate-900 transition-opacity hover:underline dark:text-white">
                   <FiLogIn />
-                  <p>login</p>
+                  <p>Login</p>
                 </div>
               </Link>
-              <Button onClick={() => router.push('/signup')}>sign up</Button>
+              <Button onClick={() => push('/signup')}>sign up</Button>
             </>
           )}
         </div>

@@ -50,7 +50,7 @@ export const UpcomingSection = () => {
             {!isLoading && upcoming.length > 0 ? (
               <>
                 <p>
-                  next in{' '}
+                  Next in{' '}
                   {formatDistanceToNow(parseJSON(upcoming[0]?.startTime))}
                 </p>
                 <p>
@@ -65,7 +65,7 @@ export const UpcomingSection = () => {
             ) : (
               <>
                 <p className="my-4 text-center dark:text-slate-200">
-                  no upcoming reservation
+                  No upcoming reservation
                 </p>
                 <Button onClick={() => router.push('/reservation')}>
                   reserve

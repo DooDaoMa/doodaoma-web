@@ -69,7 +69,7 @@ export const groupReserveDate = (dateList: Date[]) => {
 
 export const timeDecimalToHMS = (timeDecimal: string) => {
   const hoursDecimal = timeDecimal.split('.')
-  const hours = hoursDecimal[0]
+  const hours = hoursDecimal[0] === '' ? '0' : hoursDecimal[0]
   const minutesFloat = parseFloat(`0.${hoursDecimal[1]}`) * 60
   const minutesDecimal = minutesFloat.toString().split('.')
   const minutes = minutesDecimal[0]
@@ -80,7 +80,7 @@ export const timeDecimalToHMS = (timeDecimal: string) => {
 
 export const degreesToDMS = (degs: string) => {
   const degreesDecimal = degs.split('.')
-  const degrees = degreesDecimal[0]
+  const degrees = degreesDecimal[0] === '' ? '0' : degreesDecimal[0]
   const minutesFloat = parseFloat(`0.${degreesDecimal[1]}`) * 60
   const minutesDecimal = minutesFloat.toString().split('.')
   const minutes = minutesDecimal[0]
