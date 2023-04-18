@@ -44,8 +44,9 @@ export default function Gallery() {
           Refresh
         </Button>
       </div>
+      {fetchMyImagesState.isLoading && images.length === 0 && <Loading />}
       <div className="grid grid-cols-5 gap-12">
-        {images.length > 0 ? (
+        {images.length > 0 &&
           images.map((image) => (
             <Link key={image.id} href={`/gallery/${image.id}`}>
               <div
@@ -66,10 +67,7 @@ export default function Gallery() {
                 />
               </div>
             </Link>
-          ))
-        ) : (
-          <Loading />
-        )}
+          ))}
       </div>
     </>
   )
