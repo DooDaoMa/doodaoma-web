@@ -1,12 +1,54 @@
 import Head from 'next/head'
+import { useContext, useEffect, useMemo } from 'react'
+import { TfiReload } from 'react-icons/tfi'
+import { JsonValue } from 'react-use-websocket/dist/lib/types'
 
-import { Loading } from '../../components'
-import { ImagingWebSocket } from '../../components/organisms/ImagingWebSocket'
-import { userSelector } from '../../store/features/user'
-import { useAppSelector } from '../../store/hooks'
+import { Section } from '../../components'
+import { ImagingForm } from '../../components/organisms/ImagingForm'
+import { ImagingWebSocketContext } from '../../context/ImagingWebSocketProvider'
+import { selectImaging, setImagingStatus } from '../../store/features/imaging'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { IImagingForm } from '../../types/imaging'
 
 export default function Imaging() {
-  const { currentUser } = useAppSelector(userSelector)
+  const { send, connect, isConnect } = useContext(ImagingWebSocketContext)
+  const dispatch = useAppDispatch()
+  const { imagingStatus } = useAppSelector(selectImaging)
+
+  useEffect(() => {
+    connect()
+  }, [connect])
+
+  const onAcquireImage = (value: IImagingForm) => {
+    send({
+      type: 'runImagingSequence',
+      payload: { ...value } as unknown as JsonValue,
+    })
+  }
+
+  const onCancelExposuring = () => {
+    dispatch(setImagingStatus('cancelling'))
+    send({ type: 'cancelRunningSequence' })
+  }
+
+  const status = useMemo(() => {
+    switch (imagingStatus) {
+      case 'empty':
+        return { text: 'Empty', color: 'bg-zinc-500' }
+      case 'not connect':
+        return { text: 'Not connect', color: 'bg-red-500' }
+      case 'reconnecting':
+        return { text: 'Retrying connect', color: 'bg-blue-500' }
+      case 'connecting':
+        return { text: 'Connecting', color: 'bg-yellow-500' }
+      case 'ready':
+        return { text: 'Ready', color: 'bg-green-500' }
+      case 'busy':
+        return { text: 'Busy', color: 'bg-orange-500' }
+      case 'cancelling':
+        return { text: 'Cancelling', color: 'bg-amber-500' }
+    }
+  }, [imagingStatus])
 
   return (
     <>
@@ -16,11 +58,28 @@ export default function Imaging() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {currentUser !== null ? (
-        <ImagingWebSocket userId={currentUser.id} />
-      ) : (
-        <Loading />
-      )}
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Imaging</h1>
+        <p className="flex items-center gap-2">
+          {!isConnect && (
+            <TfiReload className="cursor-pointer" onClick={connect} />
+          )}
+          Status: <span className="font-semibold">{status?.text}</span>
+          <span
+            className={`mt-1 inline-block h-3 w-3 rounded-full ${status?.color}`}></span>
+        </p>
+      </div>
+      <Section>
+        <ImagingForm
+          isCancelling={imagingStatus === 'cancelling'}
+          isCancelButtonShown={imagingStatus === 'busy'}
+          isSubmitButtonDisabled={
+            imagingStatus === 'busy' || imagingStatus !== 'ready'
+          }
+          onSubmit={onAcquireImage}
+          onCancel={onCancelExposuring}
+        />
+      </Section>
     </>
   )
 }

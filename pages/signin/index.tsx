@@ -64,9 +64,9 @@ export default function SignIn() {
             <form
               onSubmit={handleSubmit(onSignIn)}
               className="flex flex-col gap-y-3">
-              <Input label="username" {...register('username')} />
+              <Input label="Username" {...register('username')} />
               <Input
-                label="password"
+                label="Password"
                 type="password"
                 {...register('password')}
               />

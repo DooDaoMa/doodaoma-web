@@ -63,7 +63,7 @@ export const Navigation = () => {
                   className="flex cursor-pointer items-center
                 gap-x-1 text-slate-900 transition-opacity hover:underline dark:text-white">
                   <FiLogIn />
-                  <p>login</p>
+                  <p>Login</p>
                 </div>
               </Link>
               <Button onClick={() => router.push('/signup')}>sign up</Button>

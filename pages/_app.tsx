@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import { Layout } from '../components'
 import { RouteGuard } from '../components/organisms/RouteGuard'
+import { ImagingWebSocketProvider } from '../context/ImagingWebSocketProvider'
 import { store } from '../store'
 
 type CustomAppProps = AppProps & {
@@ -19,15 +20,17 @@ export default function App({ Component, pageProps }: CustomAppProps) {
   return (
     <ThemeProvider attribute="class">
       <Provider store={store}>
-        <Layout>
-          {Component.requireAuth ? (
-            <RouteGuard>
+        <ImagingWebSocketProvider>
+          <Layout>
+            {Component.requireAuth ? (
+              <RouteGuard>
+                <Component {...pageProps} />
+              </RouteGuard>
+            ) : (
               <Component {...pageProps} />
-            </RouteGuard>
-          ) : (
-            <Component {...pageProps} />
-          )}
-        </Layout>
+            )}
+          </Layout>
+        </ImagingWebSocketProvider>
       </Provider>
     </ThemeProvider>
   )
